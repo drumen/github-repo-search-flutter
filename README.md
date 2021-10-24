@@ -10,5 +10,10 @@ It displays results in a list in descending order of last updated time.
 On clicking a list item it opens a details page with owners profile picture,
 repository name, owners name, last updated time and repository description.
 
-App is tested on Android and Chrome. It's optimized for Android. Optimization
-for Chrome will be implemented.
+App is tested on Android and Chrome. It's optimized for mobile and web.
+
+<p align="center"><img src="screenshot-web.png"></p>
+
+<p align="center"><img src="screenshot-mobile-list.png"></p>
+
+<p align="center"><img src="screenshot-mobile-details.png"></p>

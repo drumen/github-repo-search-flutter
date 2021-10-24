@@ -4,14 +4,15 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:github_repo_search/github/github.dart';
 import 'package:http/http.dart' as http;
 
 part 'search_event.dart';
 part 'search_state.dart';
 
-// public access token
-const publicAccessToken = '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';
+// GitHub Public Access Token
+String gitHubPublicAccessToken = dotenv.get('GITHUB_PERSONAL_ACCESS_TOKEN');
 
 const _host = 'api.github.com';
 const _contextRoot = '/search/repositories';
@@ -96,7 +97,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         queryParameters,
       ),
       headers: {
-        HttpHeaders.authorizationHeader: 'token $publicAccessToken',
+        HttpHeaders.authorizationHeader: 'token $gitHubPublicAccessToken',
       },
     );
 

@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/github.dart';
 
+typedef RepoSelectedCallback = Null Function(GitHubRepository gitHubRepo);
+
 class GitHubSearchList extends StatefulWidget {
-  const GitHubSearchList(this.query, {Key? key}) : super(key: key);
+  const GitHubSearchList(
+      this.query,
+      this.onItemSelected,
+      {Key? key}) : super(key: key);
+
   final String query;
+  final RepoSelectedCallback onItemSelected;
 
   @override
   _GitHubSearchListState createState() => _GitHubSearchListState();
@@ -78,7 +85,10 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
                     ? const BottomLoader()
                     : GitHubRepoListItem(
                           index,
-                          gitHubRepo: state.searchResults[index]
+                          gitHubRepo: state.searchResults[index],
+                          clickedRepo: (selectedGitHubRepo ) {
+                            widget.onItemSelected(selectedGitHubRepo);
+                          },
                       );
               },
               itemCount: state.hasReachedMax

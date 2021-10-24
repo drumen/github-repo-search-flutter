@@ -1,4 +1,4 @@
-export 'bloc/search_bloc.dart';
+export 'bloc/blocs.dart';
 export 'models/models.dart';
-export 'view/view.dart';
+export 'view/views.dart';
 export 'widgets/widgets.dart';

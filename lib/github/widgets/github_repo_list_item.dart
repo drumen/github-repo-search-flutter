@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:github_repo_search/github/github.dart';
-import 'package:github_repo_search/github/view/github_repo_details_page.dart';
 import 'package:intl/intl.dart';
 
 class GitHubRepoListItem extends StatelessWidget {
-  GitHubRepoListItem(this.index, {Key? key, required this.gitHubRepo}) :
-        super(key: key);
+  GitHubRepoListItem(
+      this.index,
+      {Key? key,
+       required this.gitHubRepo,
+       required this.clickedRepo
+      }
+   ) : super(key: key);
+
+  final Function(GitHubRepository) clickedRepo;
 
   final GitHubRepository gitHubRepo;
   final int index;
@@ -65,11 +71,7 @@ class GitHubRepoListItem extends StatelessWidget {
         trailing: const Icon(Icons.arrow_forward_ios, color: Color(0x22000000)),
         dense: true,
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute<void>(builder: (context) =>
-                GitHubRepoDetailsPage(gitHubRepo: gitHubRepo)),
-          );
+          clickedRepo(gitHubRepo);
         },
       ),
     );

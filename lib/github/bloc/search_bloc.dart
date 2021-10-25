@@ -37,6 +37,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async {
     if (state.hasReachedMax && !event.resetSearch) return;
     try {
+      if (event.resetSearch) {
+        emit(state.copyWith(
+          status: SearchStatus.resetList,
+          searchResults: const Tuple2(SearchType.repositories, []),
+          hasReachedMax: true,
+        ));
+      }
       if (state.status == SearchStatus.initial || event.resetSearch) {
         final searchResults =
             await _fetchGitHubRepos(event.query, event.searchType);

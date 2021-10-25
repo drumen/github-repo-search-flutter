@@ -49,6 +49,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                     groupValue: _searchType,
                     onChanged: (value) {
                       _searchType = value as SearchType;
+                      _selectedObject = null;
                       setState(() {});
                       context.read<SearchBloc>().add(FetchQuery(
                           _currentQuery, _searchType, true));
@@ -60,6 +61,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                     groupValue: _searchType,
                     onChanged: (value) {
                       _searchType = value as SearchType;
+                      _selectedObject = null;
                       setState(() {});
                       context.read<SearchBloc>().add(FetchQuery(
                           _currentQuery, _searchType, true));
@@ -71,6 +73,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                     groupValue: _searchType,
                     onChanged: (value) {
                       _searchType = value as SearchType;
+                      _selectedObject = null;
                       setState(() {});
                       context.read<SearchBloc>().add(FetchQuery(
                           _currentQuery, _searchType, true));

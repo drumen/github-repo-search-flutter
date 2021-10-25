@@ -1,6 +1,6 @@
 part of 'search_bloc.dart';
 
-enum SearchStatus { initial, success, failure, queryRateExceeded }
+enum SearchStatus { initial, success, failure, queryRateExceeded, resetList }
 
 class SearchState {
   const SearchState({

@@ -12,6 +12,8 @@ repository name, owners name, last updated time and repository description.
 
 App is tested on Android and Chrome. It's optimized for mobile and web.
 
+<p align="center"><img src="recording-web.gif"></p>
+
 <p align="center"><img src="screenshot-web.png"></p>
 
 <p align="center"><img src="screenshot-mobile-list.png"></p>

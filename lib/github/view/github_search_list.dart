@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/github.dart';
 
-typedef RepoSelectedCallback = Null Function(GitHubRepository gitHubRepo);
+typedef ObjectSelectedCallback = Null Function(Object gitHubResult);
 
 class GitHubSearchList extends StatefulWidget {
   const GitHubSearchList(
@@ -13,7 +13,7 @@ class GitHubSearchList extends StatefulWidget {
 
   final String _query;
   final SearchType _searchType;
-  final RepoSelectedCallback _onItemSelected;
+  final ObjectSelectedCallback _onItemSelected;
 
   @override
   _GitHubSearchListState createState() => _GitHubSearchListState();
@@ -70,7 +70,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
               ),
             );
           case SearchStatus.success:
-            if (state.searchResults.isEmpty) {
+            if (state.searchResults.item2.isEmpty) {
               return const Center(
                 child: Text(
                   'No results found.',
@@ -83,19 +83,20 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
             }
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                return index >= state.searchResults.length
+                return index >= state.searchResults.item2.length
                     ? const BottomLoader()
-                    : GitHubRepoListItem(
+                    : _searchTypeListItem(
+                          state.searchResults.item1,
                           index,
-                          gitHubRepo: state.searchResults[index],
-                          clickedRepo: (selectedGitHubRepo ) {
-                            widget._onItemSelected(selectedGitHubRepo);
-                          },
+                          state.searchResults.item2[index],
+                          (selectedGitHubObject) {
+                            widget._onItemSelected(selectedGitHubObject);
+                          }
                       );
               },
               itemCount: state.hasReachedMax
-                  ? state.searchResults.length
-                  : state.searchResults.length + 1,
+                  ? state.searchResults.item2.length
+                  : state.searchResults.item2.length + 1,
               controller: _scrollController,
             );
           default:
@@ -124,5 +125,35 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
+  }
+
+  Widget _searchTypeListItem(
+      SearchType searchType,
+      int index,
+      Object searchResult,
+      Null Function(Object) itemSelectedCallback
+  ) {
+    switch (searchType) {
+      case SearchType.repositories:
+        return GitHubRepoListItem(
+            index,
+            searchResult as GitHubRepository,
+            itemSelectedCallback
+        );
+      case SearchType.users:
+        return GitHubUserListItem(
+            index,
+            searchResult as GitHubUser,
+            itemSelectedCallback
+        );
+      case SearchType.code:
+        return GitHubRepoListItem(
+            index,
+            searchResult as GitHubRepository,
+            itemSelectedCallback
+        );
+      default:
+        return Container();
+    }
   }
 }

@@ -5,17 +5,17 @@ enum SearchStatus { initial, success, failure, queryRateExceeded }
 class SearchState {
   const SearchState({
     this.status = SearchStatus.initial,
-    this.searchResults = const <GitHubRepository>[],
+    this.searchResults = const Tuple2(SearchType.repositories, []),
     this.hasReachedMax = false,
   });
 
   final SearchStatus status;
-  final List<GitHubRepository> searchResults;
+  final Tuple2<SearchType, List<Object>> searchResults;
   final bool hasReachedMax;
 
   SearchState copyWith({
     SearchStatus? status,
-    List<GitHubRepository>? searchResults,
+    Tuple2<SearchType, List<Object>>? searchResults,
     bool? hasReachedMax,
   }) {
     return SearchState(
@@ -27,6 +27,6 @@ class SearchState {
 
   @override
   String toString() {
-    return '''SearchState { status: $status, hasReachedMax: $hasReachedMax, results: ${searchResults.length} }''';
+    return '''SearchState { status: $status, hasReachedMax: $hasReachedMax, results: ${searchResults.item2.length} }''';
   }
 }

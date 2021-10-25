@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:github_repo_search/github/github.dart';
 import 'package:intl/intl.dart';
 
-class GitHubRepoListItem extends StatelessWidget {
-  GitHubRepoListItem(
+class GitHubUserListItem extends StatelessWidget {
+  const GitHubUserListItem(
       this._index,
-      this._gitHubRepo,
-      this._clickedRepo,
+      this._gitHubUser,
+      this._clickedUser,
       {Key? key}
-      ) : super(key: key);
+   ) : super(key: key);
 
-  final Function(GitHubRepository) _clickedRepo;
-  final GitHubRepository _gitHubRepo;
+  final Function(GitHubUser) _clickedUser;
+  final GitHubUser _gitHubUser;
   final int _index;
-
-  late final _lastUpdated = DateTime.parse(_gitHubRepo.lastUpdateTime);
-  final _df = DateFormat('yyyy-MM-dd HH:mm:ss');
 
   @override
   Widget build(BuildContext context) {
@@ -30,14 +27,14 @@ class GitHubRepoListItem extends StatelessWidget {
         title: RichText(
           overflow: TextOverflow.ellipsis,
           text: TextSpan(
-            text: 'Repo name: ',
+            text: 'Username: ',
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
             ),
             children: [
               TextSpan(
-                text: _gitHubRepo.name,
+                text: _gitHubUser.userName,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
@@ -50,14 +47,14 @@ class GitHubRepoListItem extends StatelessWidget {
         isThreeLine: true,
         subtitle: RichText(
           text: TextSpan(
-            text: 'Updated: ',
+            text: 'Type: ',
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
             ),
             children: [
               TextSpan(
-                text: '${_df.format(_lastUpdated)} UTC',
+                text: _gitHubUser.type,
                 style: TextStyle(
                   color: Colors.grey[800],
                   fontSize: 14,
@@ -69,7 +66,7 @@ class GitHubRepoListItem extends StatelessWidget {
         trailing: const Icon(Icons.arrow_forward_ios, color: Color(0x22000000)),
         dense: true,
         onTap: () {
-          _clickedRepo(_gitHubRepo);
+          _clickedUser(_gitHubUser);
         },
       ),
     );

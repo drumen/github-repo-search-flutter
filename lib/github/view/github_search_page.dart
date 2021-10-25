@@ -15,7 +15,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
 
   String _currentQuery = '';
   bool _isLargeScreen = false;
-  GitHubRepository? _selectedRepo;
+  Object? _selectedObject;
   SearchType _searchType = SearchType.repositories;
 
   @override
@@ -91,24 +91,25 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                  return Row(children: <Widget>[
                    Expanded(
                      child: GitHubSearchList(
-                       _currentQuery, _searchType, (gitHubRepo) {
+                       _currentQuery, _searchType, (gitHubObject) {
                          if (_isLargeScreen) {
-                           _selectedRepo = gitHubRepo;
+                           _selectedObject = gitHubObject;
                            setState(() {});
-                         } else {
-                           Navigator.push(context, MaterialPageRoute(
-                             builder: (context) {
-                               return GitHubRepoDetailsPage(gitHubRepo);
-                             },
-                           ));
                          }
+                         // else {
+                         //   Navigator.push(context, MaterialPageRoute(
+                         //     builder: (context) {
+                         //       return GitHubRepoDetailsPage(gitHubObject);
+                         //     },
+                         //   ));
+                         // }
                      }),
                    ),
-                   _isLargeScreen ?
-                     Expanded(child: GitHubRepoDetailsWidget(
-                        gitHubRepo: _selectedRepo
-                      )
-                    ) : Container(),
+                   // _isLargeScreen ?
+                   //   Expanded(child: GitHubRepoDetailsWidget(
+                   //      gitHubObject: _selectedObject
+                   //    )
+                   //  ) : Container(),
                  ]);
                }),
               ),

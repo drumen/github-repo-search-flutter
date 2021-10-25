@@ -16,7 +16,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
   String _currentQuery = '';
   bool _isLargeScreen = false;
   GitHubRepository? _selectedRepo;
-  SearchType _searchType = SearchType.repo;
+  SearchType _searchType = SearchType.repositories;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +44,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                 children: <Widget>[
                   const Text('Search for:'),
                   Radio(
-                    value: SearchType.repo,
+                    value: SearchType.repositories,
                     groupValue: _searchType,
                     onChanged: (value) {
                       _searchType = value as SearchType;
@@ -55,7 +55,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                   ),
                   const Text('Repo'),
                   Radio(
-                    value: SearchType.owner,
+                    value: SearchType.users,
                     groupValue: _searchType,
                     onChanged: (value) {
                       _searchType = value as SearchType;

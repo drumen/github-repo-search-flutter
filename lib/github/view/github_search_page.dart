@@ -13,9 +13,10 @@ class GitHubSearchPage extends StatefulWidget {
 
 class _GitHubSearchPageState extends State<GitHubSearchPage> {
 
-  String currentQuery = '';
-  bool isLargeScreen = false;
-  GitHubRepository? selectedRepo;
+  String _currentQuery = '';
+  bool _isLargeScreen = false;
+  GitHubRepository? _selectedRepo;
+  SearchType _searchType = SearchType.repo;
 
   @override
   Widget build(BuildContext context) {
@@ -32,25 +33,50 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                       border: OutlineInputBorder(),
                       hintText: 'Enter GitHub repository name...'),
                   onChanged: (query) {
-                    currentQuery = query;
+                    _currentQuery = query;
                     context.read<SearchBloc>().add(FetchQuery(query, true));
                   },
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Text('Search for:'),
+                  Radio(
+                    value: SearchType.repo,
+                    groupValue: _searchType,
+                    onChanged: (value) => {}
+                  ),
+                  const Text('Repo'),
+                  Radio(
+                    value: SearchType.owner,
+                    groupValue: _searchType,
+                    onChanged: (value) => {}
+                  ),
+                  const Text('User'),
+                  Radio(
+                    value: SearchType.code,
+                    groupValue: _searchType,
+                    onChanged: (value) => {}
+                  ),
+                  const Text('Code'),
+                ],
+              ),
+
               Expanded(
                child: OrientationBuilder(builder: (context, orientation) {
 
                  if (MediaQuery.of(context).size.width > 700) {
-                   isLargeScreen = true;
+                   _isLargeScreen = true;
                  } else {
-                   isLargeScreen = false;
+                   _isLargeScreen = false;
                  }
 
                  return Row(children: <Widget>[
                    Expanded(
-                     child: GitHubSearchList(currentQuery, (gitHubRepo) {
-                       if (isLargeScreen) {
-                         selectedRepo = gitHubRepo;
+                     child: GitHubSearchList(_currentQuery, (gitHubRepo) {
+                       if (_isLargeScreen) {
+                         _selectedRepo = gitHubRepo;
                          setState(() {});
                        } else {
                          Navigator.push(context, MaterialPageRoute(
@@ -61,9 +87,9 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                        }
                      }),
                    ),
-                   isLargeScreen ?
-                    Expanded(child: GitHubRepoDetailsWidget(
-                        gitHubRepo: selectedRepo
+                   _isLargeScreen ?
+                     Expanded(child: GitHubRepoDetailsWidget(
+                        gitHubRepo: _selectedRepo
                       )
                     ) : Container(),
                  ]);

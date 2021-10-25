@@ -34,7 +34,8 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                       hintText: 'Enter GitHub repository name...'),
                   onChanged: (query) {
                     _currentQuery = query;
-                    context.read<SearchBloc>().add(FetchQuery(query, true));
+                    context.read<SearchBloc>().add(FetchQuery(
+                        query, _searchType, true));
                   },
                 ),
               ),
@@ -45,19 +46,34 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                   Radio(
                     value: SearchType.repo,
                     groupValue: _searchType,
-                    onChanged: (value) => {}
+                    onChanged: (value) {
+                      _searchType = value as SearchType;
+                      setState(() {});
+                      context.read<SearchBloc>().add(FetchQuery(
+                          _currentQuery, _searchType, true));
+                    }
                   ),
                   const Text('Repo'),
                   Radio(
                     value: SearchType.owner,
                     groupValue: _searchType,
-                    onChanged: (value) => {}
+                    onChanged: (value) {
+                      _searchType = value as SearchType;
+                      setState(() {});
+                      context.read<SearchBloc>().add(FetchQuery(
+                          _currentQuery, _searchType, true));
+                    }
                   ),
                   const Text('User'),
                   Radio(
                     value: SearchType.code,
                     groupValue: _searchType,
-                    onChanged: (value) => {}
+                    onChanged: (value) {
+                      _searchType = value as SearchType;
+                      setState(() {});
+                      context.read<SearchBloc>().add(FetchQuery(
+                          _currentQuery, _searchType, true));
+                    }
                   ),
                   const Text('Code'),
                 ],
@@ -74,17 +90,18 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
 
                  return Row(children: <Widget>[
                    Expanded(
-                     child: GitHubSearchList(_currentQuery, (gitHubRepo) {
-                       if (_isLargeScreen) {
-                         _selectedRepo = gitHubRepo;
-                         setState(() {});
-                       } else {
-                         Navigator.push(context, MaterialPageRoute(
-                           builder: (context) {
-                             return GitHubRepoDetailsPage(gitHubRepo);
-                           },
-                         ));
-                       }
+                     child: GitHubSearchList(
+                       _currentQuery, _searchType, (gitHubRepo) {
+                         if (_isLargeScreen) {
+                           _selectedRepo = gitHubRepo;
+                           setState(() {});
+                         } else {
+                           Navigator.push(context, MaterialPageRoute(
+                             builder: (context) {
+                               return GitHubRepoDetailsPage(gitHubRepo);
+                             },
+                           ));
+                         }
                      }),
                    ),
                    _isLargeScreen ?

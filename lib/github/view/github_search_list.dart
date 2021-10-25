@@ -6,12 +6,14 @@ typedef RepoSelectedCallback = Null Function(GitHubRepository gitHubRepo);
 
 class GitHubSearchList extends StatefulWidget {
   const GitHubSearchList(
-      this.query,
-      this.onItemSelected,
+      this._query,
+      this._searchType,
+      this._onItemSelected,
       {Key? key}) : super(key: key);
 
-  final String query;
-  final RepoSelectedCallback onItemSelected;
+  final String _query;
+  final SearchType _searchType;
+  final RepoSelectedCallback _onItemSelected;
 
   @override
   _GitHubSearchListState createState() => _GitHubSearchListState();
@@ -33,7 +35,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        if (widget.query == '') {
+        if (widget._query == '') {
           return const Center(
             child: Text(
               'Enter the name of GitHub repository\nyou are searching for...',
@@ -87,7 +89,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
                           index,
                           gitHubRepo: state.searchResults[index],
                           clickedRepo: (selectedGitHubRepo ) {
-                            widget.onItemSelected(selectedGitHubRepo);
+                            widget._onItemSelected(selectedGitHubRepo);
                           },
                       );
               },
@@ -112,7 +114,9 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
   }
 
   void _onScroll() {
-    if (_isBottom)  _postBloc.add(FetchQuery(widget.query, false));
+    if (_isBottom) {
+      _postBloc.add(FetchQuery(widget._query, widget._searchType, false));
+    }
   }
 
   bool get _isBottom {

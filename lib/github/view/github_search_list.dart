@@ -147,9 +147,9 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
             itemSelectedCallback
         );
       case SearchType.code:
-        return GitHubRepoListItem(
+        return GitHubCodeListItem(
             index,
-            searchResult as GitHubRepository,
+            searchResult as GitHubCode,
             itemSelectedCallback
         );
       default:

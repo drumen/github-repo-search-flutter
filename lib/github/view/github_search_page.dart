@@ -129,7 +129,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
       case SearchType.users:
         return GitHubUserDetailsPage(gitHubObject as GitHubUser);
       case SearchType.code:
-        return GitHubRepoDetailsPage(gitHubObject as GitHubRepository);
+        return GitHubCodeDetailsPage(gitHubObject as GitHubCode);
     }
   }
 
@@ -145,8 +145,8 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
           GitHubUserDetailsWidget(gitHubObject as GitHubUser);
       case SearchType.code:
         return gitHubObject == null ?
-          GitHubRepoDetailsWidget(null) :
-          GitHubRepoDetailsWidget(gitHubObject as GitHubRepository);
+          const GitHubCodeDetailsWidget(null) :
+          GitHubCodeDetailsWidget(gitHubObject as GitHubCode);
     }
   }
 }

@@ -126,7 +126,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           break;
         case SearchType.code:
           searchList = items.map((dynamic json) {
-            return GitHubRepository.fromJson(json as Map<String, dynamic>);
+            return GitHubCode.fromJson(json as Map<String, dynamic>);
           }).toList();
           break;
       }
@@ -168,8 +168,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         return <String, dynamic>{
           'accept': 'application/vnd.github.v3+json',
           'q': query,
-          'in': 'name',
-          'sort': 'updated',
           'per_page': '30',
           'page': '$page'
         };

@@ -21,6 +21,8 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    _isLargeScreen = MediaQuery.of(context).size.width > 700;
+
     return Scaffold(
       appBar: AppBar(title: const Text('GitHub Repository Search')),
       body: BlocBuilder<SearchBloc, SearchState>(
@@ -29,69 +31,75 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: TextField(
-                  decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Enter GitHub repository name...'),
-                  onChanged: (query) {
-                    _currentQuery = query;
-                    context.read<SearchBloc>().add(FetchQuery(
-                        query, _searchType, true));
-                  },
-                ),
+                child: OrientationBuilder(builder: (context, orientation) {
+                  return Flex(
+                    direction: _isLargeScreen ? Axis.horizontal : Axis.vertical,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child:TextField(
+                          decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Enter GitHub repository name...'),
+                          onChanged: (query) {
+                            _currentQuery = query;
+                            context.read<SearchBloc>().add(FetchQuery(
+                                query, _searchType, true));
+                          },
+                        ),
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child:Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              const Text('Search for:'),
+                              Radio(
+                                  value: SearchType.repositories,
+                                  groupValue: _searchType,
+                                  onChanged: (value) {
+                                    _searchType = value as SearchType;
+                                    _selectedObject = null;
+                                    setState(() {});
+                                    context.read<SearchBloc>().add(FetchQuery(
+                                        _currentQuery, _searchType, true));
+                                  }
+                              ),
+                              const Text('Repo'),
+                              Radio(
+                                  value: SearchType.users,
+                                  groupValue: _searchType,
+                                  onChanged: (value) {
+                                    _searchType = value as SearchType;
+                                    _selectedObject = null;
+                                    setState(() {});
+                                    context.read<SearchBloc>().add(FetchQuery(
+                                        _currentQuery, _searchType, true));
+                                  }
+                              ),
+                              const Text('User'),
+                              Radio(
+                                  value: SearchType.code,
+                                  groupValue: _searchType,
+                                  onChanged: (value) {
+                                    _searchType = value as SearchType;
+                                    _selectedObject = null;
+                                    setState(() {});
+                                    context.read<SearchBloc>().add(FetchQuery(
+                                        _currentQuery, _searchType, true));
+                                  }
+                              ),
+                              const Text('Code'),
+                            ],
+                          ),
+                        ),
+                     ],
+                  );
+                }),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Text('Search for:'),
-                  Radio(
-                    value: SearchType.repositories,
-                    groupValue: _searchType,
-                    onChanged: (value) {
-                      _searchType = value as SearchType;
-                      _selectedObject = null;
-                      setState(() {});
-                      context.read<SearchBloc>().add(FetchQuery(
-                          _currentQuery, _searchType, true));
-                    }
-                  ),
-                  const Text('Repo'),
-                  Radio(
-                    value: SearchType.users,
-                    groupValue: _searchType,
-                    onChanged: (value) {
-                      _searchType = value as SearchType;
-                      _selectedObject = null;
-                      setState(() {});
-                      context.read<SearchBloc>().add(FetchQuery(
-                          _currentQuery, _searchType, true));
-                    }
-                  ),
-                  const Text('User'),
-                  Radio(
-                    value: SearchType.code,
-                    groupValue: _searchType,
-                    onChanged: (value) {
-                      _searchType = value as SearchType;
-                      _selectedObject = null;
-                      setState(() {});
-                      context.read<SearchBloc>().add(FetchQuery(
-                          _currentQuery, _searchType, true));
-                    }
-                  ),
-                  const Text('Code'),
-                ],
-              ),
-
               Expanded(
                child: OrientationBuilder(builder: (context, orientation) {
-
-                 if (MediaQuery.of(context).size.width > 700) {
-                   _isLargeScreen = true;
-                 } else {
-                   _isLargeScreen = false;
-                 }
-
                  return Row(children: <Widget>[
                    Expanded(
                      child: GitHubSearchList(

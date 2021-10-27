@@ -36,10 +36,11 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         if (widget._query == '') {
-          return const Center(
+          return Center(
             child: Text(
-              'Enter the name of GitHub repository\nyou are searching for...',
-              style: TextStyle(
+              state.searchResults.item1.longPrintingString ?? '',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
                 fontSize: 18,
                 fontStyle: FontStyle.italic,
               ),
@@ -60,10 +61,11 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
               ),
             );
           case SearchStatus.failure:
-            return const Center(
+            return Center(
               child: Text(
-                'Enter the name of GitHub repository\nyou are searching for...',
-                style: TextStyle(
+                state.searchResults.item1.longPrintingString ?? '',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
                   fontSize: 18,
                   fontStyle: FontStyle.italic,
                 ),

@@ -24,7 +24,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
     _isLargeScreen = MediaQuery.of(context).size.width > 700;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('GitHub Repository Search')),
+      appBar: AppBar(title: const Text('GitHub Search')),
       body: BlocBuilder<SearchBloc, SearchState>(
         builder: (context, state) =>
           Column(
@@ -39,9 +39,10 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                       Flexible(
                         fit: FlexFit.loose,
                         child:TextField(
-                          decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter GitHub repository name...'),
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            hintText: _searchType.shortPrintingString,
+                          ),
                           onChanged: (query) {
                             _currentQuery = query;
                             context.read<SearchBloc>().add(FetchQuery(

@@ -40,7 +40,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       if (event.resetSearch) {
         emit(state.copyWith(
           status: SearchStatus.resetList,
-          searchResults: const Tuple2(SearchType.repositories, []),
+          searchResults: Tuple2(event.searchType, []),
           hasReachedMax: true,
         ));
       }

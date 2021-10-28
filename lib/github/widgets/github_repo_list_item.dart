@@ -4,27 +4,25 @@ import 'package:intl/intl.dart';
 
 class GitHubRepoListItem extends StatelessWidget {
   GitHubRepoListItem(
-      this.index,
-      {Key? key,
-       required this.gitHubRepo,
-       required this.clickedRepo
-      }
-   ) : super(key: key);
+      this._index,
+      this._gitHubRepo,
+      this._clickedRepo,
+      {Key? key}
+      ) : super(key: key);
 
-  final Function(GitHubRepository) clickedRepo;
+  final Function(GitHubRepository) _clickedRepo;
+  final GitHubRepository _gitHubRepo;
+  final int _index;
 
-  final GitHubRepository gitHubRepo;
-  final int index;
-
-  late final lastUpdated = DateTime.parse(gitHubRepo.lastUpdateTime);
-  final df = DateFormat('yyyy-MM-dd HH:mm:ss');
+  late final _lastUpdated = DateTime.parse(_gitHubRepo.lastUpdateTime);
+  final _df = DateFormat('yyyy-MM-dd HH:mm:ss');
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: ListTile(
         leading: Text(
-          '${index + 1}.',
+          '${_index + 1}.',
           style: const TextStyle(
             fontSize: 16,
           ),
@@ -39,7 +37,7 @@ class GitHubRepoListItem extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: gitHubRepo.name,
+                text: _gitHubRepo.name,
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: 16,
@@ -59,7 +57,7 @@ class GitHubRepoListItem extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: '${df.format(lastUpdated)} UTC',
+                text: '${_df.format(_lastUpdated)} UTC',
                 style: TextStyle(
                   color: Colors.grey[800],
                   fontSize: 14,
@@ -71,7 +69,7 @@ class GitHubRepoListItem extends StatelessWidget {
         trailing: const Icon(Icons.arrow_forward_ios, color: Color(0x22000000)),
         dense: true,
         onTap: () {
-          clickedRepo(gitHubRepo);
+          _clickedRepo(_gitHubRepo);
         },
       ),
     );

@@ -7,6 +7,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:github_repo_search/github/github.dart';
 import 'package:http/http.dart' as http;
+import 'package:tuple/tuple.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -15,7 +16,7 @@ part 'search_state.dart';
 String gitHubPublicAccessToken = dotenv.get('GITHUB_PERSONAL_ACCESS_TOKEN');
 
 const _host = 'api.github.com';
-const _contextRoot = '/search/repositories';
+const _contextRoot = '/search/';
 
 class Exception403 implements Exception {
   Exception403();
@@ -36,9 +37,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   ) async {
     if (state.hasReachedMax && !event.resetSearch) return;
     try {
+      if (event.resetSearch) {
+        emit(state.copyWith(
+          status: SearchStatus.resetList,
+          searchResults: Tuple2(event.searchType, []),
+          hasReachedMax: true,
+        ));
+      }
       if (state.status == SearchStatus.initial || event.resetSearch) {
-        final searchResults = await _fetchGitHubRepos(event.query);
-        if (searchResults.length < 30) {
+        final searchResults =
+            await _fetchGitHubRepos(event.query, event.searchType);
+        if (searchResults.item2.length < 30) {
           return emit(state.copyWith(
             status: SearchStatus.success,
             searchResults: searchResults,
@@ -55,15 +64,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       final searchResults =
         await _fetchGitHubRepos(
             event.query,
-            state.searchResults.length ~/ 30 + 1
+            event.searchType,
+            state.searchResults.item2.length ~/ 30 + 1
         );
-        searchResults.isEmpty
+        searchResults.item2.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(
               state.copyWith(
                 status: SearchStatus.success,
                 searchResults:
-                    List.of(state.searchResults)..addAll(searchResults),
+                    Tuple2(
+                        searchResults.item1,
+                        List.of(state.searchResults.item2)..addAll(searchResults.item2)),
                 hasReachedMax: false,
               ),
             );
@@ -74,26 +86,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
-  Future<List<GitHubRepository>> _fetchGitHubRepos(
+  Future<Tuple2<SearchType, List<Object>>> _fetchGitHubRepos(
       String query,
+      SearchType searchType,
       [int page = 1]) async {
 
-    var queryParameters =
-      <String, dynamic>{
-        'accept': 'application/vnd.github.v3+json',
-        'q': query,
-        'in': 'name',
-        'sort': 'updated',
-        'per_page': '30',
-        'page': '$page'
-      };
+    var queryParameters = _getQueryParameters(query, searchType, page);
 
     log('Sending GitHub query: $queryParameters');
 
     final response = await httpClient.get(
       Uri.https(
         _host,
-        _contextRoot,
+        _contextRoot + searchType.toShortString(),
         queryParameters,
       ),
       headers: {
@@ -106,14 +111,66 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (response.statusCode == 200) {
       final body = json.decode(response.body) as Map;
       final items = body['items'] as List;
-      final searchList = items.map((dynamic json) {
-        return GitHubRepository.fromJson(json as Map<String, dynamic>);
-      }).toList();
-      return searchList;
+      List<Object> searchList = [];
+
+      switch (searchType) {
+        case SearchType.repositories:
+          searchList = items.map((dynamic json) {
+            return GitHubRepository.fromJson(json as Map<String, dynamic>);
+          }).toList();
+          break;
+        case SearchType.users:
+          searchList = items.map((dynamic json) {
+            return GitHubUser.fromJson(json as Map<String, dynamic>);
+          }).toList();
+          break;
+        case SearchType.code:
+          searchList = items.map((dynamic json) {
+            return GitHubCode.fromJson(json as Map<String, dynamic>);
+          }).toList();
+          break;
+      }
+
+      return Tuple2(searchType, searchList);
+
     } else if (response.statusCode == 403) {
       throw Exception403();
     }
 
     throw Exception('error fetching github');
+  }
+
+  Map<String, dynamic> _getQueryParameters(
+      String query,
+      SearchType searchType,
+      int page
+  ) {
+    switch (searchType) {
+      case SearchType.repositories:
+        return <String, dynamic>{
+          'accept': 'application/vnd.github.v3+json',
+          'q': query,
+          'in': 'name',
+          'sort': 'updated',
+          'per_page': '30',
+          'page': '$page'
+        };
+      case SearchType.users:
+        return <String, dynamic>{
+          'accept': 'application/vnd.github.v3+json',
+          'q': query,
+          'in': 'name',
+          'sort': 'repositories',
+          'per_page': '30',
+          'page': '$page'
+        };
+      case SearchType.code:
+        return <String, dynamic>{
+          'accept': 'application/vnd.github.v3+json',
+          'q': query,
+          'per_page': '30',
+          'page': '$page'
+        };
+    }
   }
 }

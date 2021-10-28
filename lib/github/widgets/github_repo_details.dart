@@ -3,19 +3,19 @@ import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:intl/intl.dart';
 
 class GitHubRepoDetailsWidget extends StatelessWidget {
-  GitHubRepoDetailsWidget({Key? key, required this.gitHubRepo}) : super(key: key);
+  GitHubRepoDetailsWidget(this._gitHubRepo, {Key? key}) : super(key: key);
 
-  final GitHubRepository? gitHubRepo;
+  final GitHubRepository? _gitHubRepo;
 
-  late final DateTime lastUpdated;
-  final df = DateFormat('yyyy-MM-dd HH:mm:ss');
+  late final DateTime _lastUpdated;
+  final _df = DateFormat('yyyy-MM-dd HH:mm:ss');
 
   @override
   Widget build(BuildContext context) {
-    if (gitHubRepo == null) {
+    if (_gitHubRepo == null) {
       return Container();
     } else {
-      lastUpdated = DateTime.parse(gitHubRepo!.lastUpdateTime);
+      _lastUpdated = DateTime.parse(_gitHubRepo!.lastUpdateTime);
       return Scaffold(
         body: SingleChildScrollView(
           child: Padding(
@@ -31,7 +31,7 @@ class GitHubRepoDetailsWidget extends StatelessWidget {
                     radius: 100.0,
                     child: CircleAvatar(
                       backgroundImage: NetworkImage(
-                        gitHubRepo!.owner['avatar_url'] as String,
+                        _gitHubRepo!.owner['avatar_url'] as String,
                       ),
                       radius: 95.0,
                     ),
@@ -61,7 +61,7 @@ class GitHubRepoDetailsWidget extends StatelessWidget {
             ),
             const SizedBox(width: 0, height: 5),
             Text(
-              gitHubRepo!.name,
+              _gitHubRepo!.name,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             const SizedBox(width: 0, height: 30),
@@ -73,11 +73,10 @@ class GitHubRepoDetailsWidget extends StatelessWidget {
             ),
             const SizedBox(width: 0, height: 5),
             Text(
-              '${df.format(lastUpdated)} UTC',
+              '${_df.format(_lastUpdated)} UTC',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             const SizedBox(width: 0, height: 30),
-
 
             // OWNER NAME
             const Text(
@@ -86,7 +85,7 @@ class GitHubRepoDetailsWidget extends StatelessWidget {
             ),
             const SizedBox(width: 0, height: 5),
             Text(
-              gitHubRepo!.owner['login'] as String,
+              _gitHubRepo!.owner['login'] as String,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             const SizedBox(width: 0, height: 30),
@@ -98,7 +97,7 @@ class GitHubRepoDetailsWidget extends StatelessWidget {
             ),
             const SizedBox(width: 0, height: 5),
             Text(
-              gitHubRepo!.description ?? '[no description]',
+              _gitHubRepo!.description ?? '[no description]',
               style: const TextStyle(
                 fontSize: 18,
                 fontStyle: FontStyle.italic,

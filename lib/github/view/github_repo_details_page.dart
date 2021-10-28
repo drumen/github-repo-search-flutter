@@ -17,7 +17,7 @@ class _GitHubRepoDetailsPageState extends State<GitHubRepoDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.gitHubRepo.name)),
-      body: GitHubRepoDetailsWidget(gitHubRepo: widget.gitHubRepo),
+      body: GitHubRepoDetailsWidget(widget.gitHubRepo),
     );
   }
 }

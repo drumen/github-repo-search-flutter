@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 
 import 'github/bloc/search_bloc.dart';
 import 'github/view/github_search_page.dart';
@@ -13,7 +12,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: BlocProvider(
-        create: (_) => SearchBloc(httpClient: http.Client()),
+        create: (_) => SearchBloc(),
         child: const GitHubSearchPage(),
       ),
     );

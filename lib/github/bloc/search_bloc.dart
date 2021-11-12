@@ -1,21 +1,23 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:github_repo_search/github/github.dart';
-import 'package:http/http.dart' as http;
+import 'package:github_repo_search/github/models/github_code.dart';
+import 'package:github_repo_search/github/models/github_repository.dart';
+import 'package:github_repo_search/github/models/github_user.dart';
+import 'package:github_repo_search/github/models/search_type.dart';
 import 'package:tuple/tuple.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
 
-// GitHub Public Access Token
+// GitHub Personal Access Token
 String gitHubPublicAccessToken = dotenv.get('GITHUB_PERSONAL_ACCESS_TOKEN');
 
-const _host = 'api.github.com';
+const _host = 'https://api.github.com';
 const _contextRoot = '/search/';
 
 class Exception403 implements Exception {
@@ -23,13 +25,21 @@ class Exception403 implements Exception {
 }
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({required this.httpClient}) : super(const SearchState()) {
+  SearchBloc() : super(const SearchState()) {
+
+    httpClient = Dio();
+
+    httpClient.options.baseUrl = _host + _contextRoot;
+    httpClient.options.headers[HttpHeaders.authorizationHeader] = 'token $gitHubPublicAccessToken';
+    httpClient.options.connectTimeout = 5000;
+    httpClient.options.receiveTimeout = 3000;
+
     on<FetchQuery>(
       _onGitHubSearchFetched,
     );
   }
 
-  final http.Client httpClient;
+  late Dio httpClient;
 
   Future<void> _onGitHubSearchFetched(
     FetchQuery event,
@@ -95,22 +105,32 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     log('Sending GitHub query: $queryParameters');
 
-    final response = await httpClient.get(
-      Uri.https(
-        _host,
-        _contextRoot + searchType.toShortString(),
-        queryParameters,
-      ),
-      headers: {
-        HttpHeaders.authorizationHeader: 'token $gitHubPublicAccessToken',
-      },
-    );
+    Response? response;
 
-    log('Received GitHub response with status code: ${response.statusCode}');
+    try {
+      response = await httpClient.get(
+          searchType.toShortString(),
+          queryParameters: queryParameters
+      );
+    } on DioError catch (e) {
+      if (e.response != null) {
+        log('Received GitHub response with status code: ${e.response!.statusCode.toString()} '
+            '(${e.response!.statusMessage.toString()})');
+
+        if (e.response!.statusCode == 403) {
+          throw Exception403();
+        }
+      } else {
+        log('Something happened in setting up or sending the request that triggered an Error. '
+            'Status message: ${e.response!.statusMessage.toString()} and Message: ${e.message}');
+      }
+    }
+
+    log('Received GitHub response with status code: ${response!.statusCode.toString()} '
+        '(${response.statusMessage.toString()})');
 
     if (response.statusCode == 200) {
-      final body = json.decode(response.body) as Map;
-      final items = body['items'] as List;
+      final items = response.data['items'] as List;
       List<Object> searchList = [];
 
       switch (searchType) {
@@ -132,9 +152,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       }
 
       return Tuple2(searchType, searchList);
-
-    } else if (response.statusCode == 403) {
-      throw Exception403();
     }
 
     throw Exception('error fetching github');

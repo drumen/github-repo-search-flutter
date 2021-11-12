@@ -60,9 +60,9 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
           case SearchStatus.queryRateExceeded:
             return const Center(
               child: Text(
-                'Slow down there a bit fellow...\nQuery rate limit was '
-                'exceeded.\nHold on a bit and you will\nbe able '
-                'to search again.',
+                'Slow down there a bit fellow...\nThere is a 99.9% chance that\n'
+                'query rate limit was exceeded.\nHold on a bit and you will\n'
+                'be able to search again.',
                 style: TextStyle(
                     fontSize: 18,
                     fontStyle: FontStyle.italic,

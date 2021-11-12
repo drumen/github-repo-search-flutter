@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_repo_search/github/github.dart';
+import 'package:github_repo_search/github/bloc/search_bloc.dart';
+import 'package:github_repo_search/github/models/github_code.dart';
+import 'package:github_repo_search/github/models/github_repository.dart';
+import 'package:github_repo_search/github/models/github_user.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
-import 'package:github_repo_search/github/view/github_repo_details_page.dart';
+import 'package:github_repo_search/github/widgets/github_code_details.dart';
 import 'package:github_repo_search/github/widgets/github_repo_details.dart';
+import 'package:github_repo_search/github/widgets/github_search_list.dart';
+import 'package:github_repo_search/github/widgets/github_user_details.dart';
+
+import 'github_code_details_page.dart';
+import 'github_repo_details_page.dart';
+import 'github_user_details_page.dart';
 
 class GitHubSearchPage extends StatefulWidget {
   const GitHubSearchPage({Key? key}) : super(key: key);

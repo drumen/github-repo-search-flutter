@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_repo_search/github/github.dart';
+import 'package:github_repo_search/github/bloc/search_bloc.dart';
+import 'package:github_repo_search/github/models/github_code.dart';
+import 'package:github_repo_search/github/models/github_repository.dart';
+import 'package:github_repo_search/github/models/github_user.dart';
+import 'package:github_repo_search/github/models/search_type.dart';
+
+import 'bottom_loader.dart';
+import 'github_code_list_item.dart';
+import 'github_repo_list_item.dart';
+import 'github_user_list_item.dart';
 
 typedef ObjectSelectedCallback = Null Function(Object gitHubResult);
 

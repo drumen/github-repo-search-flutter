@@ -22,10 +22,6 @@ const _host = 'https://api.github.com';
 const _searchRoot = '/search/';
 const _rateLimitRoot = '/rate_limit';
 
-class Exception403 implements Exception {
-  Exception403();
-}
-
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc() : super(const SearchState()) {
 
@@ -94,8 +90,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
                 rateLimits: queryResults.item3
               ),
             );
-    } on Exception403 {
-      emit(state.copyWith(status: SearchStatus.queryRateExceeded));
     } catch (_) {
       emit(state.copyWith(status: SearchStatus.failure));
     }
@@ -123,15 +117,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       if (e.response != null) {
         log('Received GitHub query response with status code: ${e.response!.statusCode.toString()} '
             '(${e.response!.statusMessage.toString()})');
-
-        // if (e.response!.statusCode == 403) {
-        //   throw Exception403();
-        // }
       } else {
         log('Something happened in setting up or sending the query request that triggered an Error. '
             'Status message: ${e.response!.statusMessage.toString()} and Message: ${e.message}');
       }
     }
+
+    log('Received GitHub query response with status code: ${searchResponse!.statusCode.toString()} '
+        '(${searchResponse.statusMessage.toString()})');
 
     // Fetch search rate limit
     try {
@@ -140,18 +133,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       if (e.response != null) {
         log('Received GitHub limit response with status code: ${e.response!.statusCode.toString()} '
             '(${e.response!.statusMessage.toString()})');
-
-        // if (e.response!.statusCode == 403) {
-        //   throw Exception403();
-        // }
       } else {
         log('Something happened in setting up or sending the limit request that triggered an Error. '
             'Status message: ${e.response!.statusMessage.toString()} and Message: ${e.message}');
       }
     }
 
-    log('Received GitHub query response with status code: ${searchResponse!.statusCode.toString()} '
-        '(${searchResponse.statusMessage.toString()})');
     log('Received GitHub limit response with status code: ${limitResponse!.statusCode.toString()} '
         '(${limitResponse.statusMessage.toString()})');
 

@@ -57,22 +57,11 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
           String message = 'Slow down there a bit fellow...\n'
                            'Query rate limit was exceeded.\n'
                            'Hold on a bit and you will\n'
-                           'be able to search again.';
+                           'be able to search again.\n'
+                           '(check timer below)';
           return _getHintAndInfoMessage(state, message: message);
         }
         switch (state.status) {
-          case SearchStatus.queryRateExceeded:
-            return const Center(
-              child: Text(
-                'Slow down there a bit fellow...\nThere is a 99.9% chance that\n'
-                'query rate limit was exceeded.\nHold on a bit and you will\n'
-                'be able to search again.',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontStyle: FontStyle.italic,
-                ),
-              ),
-            );
           case SearchStatus.failure:
             return _getHintAndInfoMessage(state);
           case SearchStatus.success:

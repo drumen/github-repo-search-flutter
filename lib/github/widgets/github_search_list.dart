@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/bloc/search_bloc.dart';
+import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/github_code.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
@@ -91,25 +92,47 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
                   ),
                 )
               );
+            } else {
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        return index >= state.searchResults.item2.length
+                            ? const BottomLoader()
+                            : _searchTypeListItem(
+                            state.searchResults.item1,
+                            index,
+                            state.searchResults.item2[index],
+                                (selectedGitHubObject) {
+                              widget._onItemSelected(selectedGitHubObject);
+                            }
+                        );
+                      },
+                      itemCount: state.hasReachedMax
+                          ? state.searchResults.item2.length
+                          : state.searchResults.item2.length + 1,
+                      controller: _scrollController,
+                    ),
+                  ),
+                  Container(
+                    height: 42,
+                    width: double.infinity,
+                    color: Colors.lightBlue[800],
+                    child: Text(
+                      'Query limit per minute: ${state.rateLimits.limit}     Queries used: ${state.rateLimits.used}\n'
+                      'Queries left: ${state.rateLimits.remaining}     Reseting in: '
+                      '${Common.getSecondsTillReset(state.rateLimits.reset)}',
+                      style: const TextStyle(color: Colors.white, fontSize: 17),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ]
+              );
             }
-            return ListView.builder(
-              itemBuilder: (BuildContext context, int index) {
-                return index >= state.searchResults.item2.length
-                    ? const BottomLoader()
-                    : _searchTypeListItem(
-                          state.searchResults.item1,
-                          index,
-                          state.searchResults.item2[index],
-                          (selectedGitHubObject) {
-                            widget._onItemSelected(selectedGitHubObject);
-                          }
-                      );
-              },
-              itemCount: state.hasReachedMax
-                  ? state.searchResults.item2.length
-                  : state.searchResults.item2.length + 1,
-              controller: _scrollController,
-            );
           default:
             return const Center(child: CircularProgressIndicator());
         }

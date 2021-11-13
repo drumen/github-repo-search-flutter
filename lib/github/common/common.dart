@@ -24,4 +24,9 @@ class Common {
         GitHubCodeDetailsWidget(gitHubObject as GitHubCode);
     }
   }
+
+  static int getSecondsTillReset(int reset) {
+    Duration difference = DateTime.fromMillisecondsSinceEpoch(reset * 1000).difference(DateTime.now());
+    return difference.inSeconds;
+  }
 }

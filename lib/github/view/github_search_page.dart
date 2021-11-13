@@ -46,9 +46,12 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                             hintText: _searchType.shortPrintingString,
                           ),
                           onChanged: (query) {
-                            _currentQuery = query;
-                            context.read<SearchBloc>().add(FetchQuery(
-                                query, _searchType, true));
+                            if (_currentQuery != query) {
+                              _currentQuery = query;
+                              context.read<SearchBloc>().add(FetchQuery(
+                                  query, _searchType, true)
+                              );
+                            }
                           },
                         ),
                       ),

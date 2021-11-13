@@ -1,23 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:github_repo_search/github/widgets/github_repo_details.dart';
 
-class GitHubRepoDetailsPage extends StatefulWidget {
+bool _wasLargeScreen = false;
 
-  final GitHubRepository gitHubRepo;
+class GitHubRepoDetailsPage extends StatelessWidget {
+  const GitHubRepoDetailsPage(this._gitHubRepo, {Key? key}) : super(key: key);
 
-  const GitHubRepoDetailsPage(this.gitHubRepo, {Key? key}) : super(key: key);
+  final GitHubRepository _gitHubRepo;
 
-  @override
-  _GitHubRepoDetailsPageState createState() => _GitHubRepoDetailsPageState();
-}
-
-class _GitHubRepoDetailsPageState extends State<GitHubRepoDetailsPage> {
   @override
   Widget build(BuildContext context) {
+    bool _isLargeScreen = MediaQuery.of(context).size.width > 700;
+
+    if (_isLargeScreen && !_wasLargeScreen) {
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
+        Navigator.pop(context);
+      });
+    }
+
+    _wasLargeScreen = _isLargeScreen;
+
     return Scaffold(
-      appBar: AppBar(title: Text(widget.gitHubRepo.name)),
-      body: GitHubRepoDetailsWidget(widget.gitHubRepo),
+      appBar: AppBar(title: Text(_gitHubRepo.name)),
+      body: GitHubRepoDetailsWidget(_gitHubRepo),
     );
   }
 }

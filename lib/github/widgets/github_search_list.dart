@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/bloc/search_bloc.dart';
@@ -34,6 +36,8 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
 
   final _scrollController = ScrollController();
   late SearchBloc _postBloc;
+  late Timer _timer;
+  late int _resetTime;
 
   @override
   void initState() {
@@ -111,6 +115,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
 
   @override
   void dispose() {
+    _timer.cancel();
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();
@@ -161,14 +166,16 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
   }
 
   Widget _buildRateLimitsTextBox(GitHubRateLimit rateLimits) {
+    _resetTime = Common.getSecondsTillReset(rateLimits.reset);
+    _startTimer();
+
     return Container(
       height: 42,
       width: double.infinity,
       color: Colors.lightBlue[800],
       child: Text(
         'Query limit per minute: ${rateLimits.limit}     Queries used: ${rateLimits.used}\n'
-            'Queries left: ${rateLimits.remaining}     Reseting in: '
-            '${Common.getSecondsTillReset(rateLimits.reset)} second(s)',
+        'Queries left: ${rateLimits.remaining}     Reseting in: $_resetTime second(s)',
         style: const TextStyle(color: Colors.white, fontSize: 17),
         textAlign: TextAlign.center,
         maxLines: 2,
@@ -195,6 +202,24 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
           ),
           _buildRateLimitsTextBox(state.rateLimits),
         ]
+    );
+  }
+
+  void _startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (_resetTime == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _resetTime--;
+          });
+        }
+      },
     );
   }
 }

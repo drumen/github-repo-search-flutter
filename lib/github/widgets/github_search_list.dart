@@ -168,7 +168,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
       child: Text(
         'Query limit per minute: ${rateLimits.limit}     Queries used: ${rateLimits.used}\n'
             'Queries left: ${rateLimits.remaining}     Reseting in: '
-            '${Common.getSecondsTillReset(rateLimits.reset)}',
+            '${Common.getSecondsTillReset(rateLimits.reset)} second(s)',
         style: const TextStyle(color: Colors.white, fontSize: 17),
         textAlign: TextAlign.center,
         maxLines: 2,

@@ -27,6 +27,6 @@ class Common {
 
   static int getSecondsTillReset(int reset) {
     Duration difference = DateTime.fromMillisecondsSinceEpoch(reset * 1000).difference(DateTime.now());
-    return difference.inSeconds;
+    return difference.inSeconds >= 0 ? difference.inSeconds : 0;
   }
 }

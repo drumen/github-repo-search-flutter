@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/bloc/search_bloc.dart';
-import 'package:github_repo_search/github/models/github_code.dart';
-import 'package:github_repo_search/github/models/github_repository.dart';
-import 'package:github_repo_search/github/models/github_user.dart';
+import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
-import 'package:github_repo_search/github/widgets/github_code_details.dart';
-import 'package:github_repo_search/github/widgets/github_repo_details.dart';
 import 'package:github_repo_search/github/widgets/github_search_list.dart';
-import 'package:github_repo_search/github/widgets/github_user_details.dart';
 
-import 'github_code_details_page.dart';
-import 'github_repo_details_page.dart';
-import 'github_user_details_page.dart';
+import 'github_details_page.dart';
 
 class GitHubSearchPage extends StatefulWidget {
   const GitHubSearchPage({Key? key}) : super(key: key);
@@ -122,14 +115,14 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                            _selectedObject = gitHubObject;
                            Navigator.push(context, MaterialPageRoute(
                              builder: (context) {
-                               return _getDetailsPage(_searchType, gitHubObject);
+                               return GitHubDetailsPage(_searchType, gitHubObject);
                              },
                            ));
                          }
                      }),
                    ),
                    _isLargeScreen ?
-                     Expanded(child: _getDetailsWidget(_searchType, _selectedObject)) :
+                     Expanded(child: Common.getDetailsWidget(_searchType, _selectedObject)) :
                      Container(),
                   ]);
                 }),
@@ -138,33 +131,5 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
           ),
       ),
     );
-  }
-
-  Widget _getDetailsPage(SearchType searchType, Object gitHubObject) {
-    switch (searchType) {
-      case SearchType.repositories:
-        return GitHubRepoDetailsPage(gitHubObject as GitHubRepository);
-      case SearchType.users:
-        return GitHubUserDetailsPage(gitHubObject as GitHubUser);
-      case SearchType.code:
-        return GitHubCodeDetailsPage(gitHubObject as GitHubCode);
-    }
-  }
-
-  _getDetailsWidget(SearchType searchType, Object? gitHubObject) {
-    switch (searchType) {
-      case SearchType.repositories:
-        return gitHubObject == null ?
-          GitHubRepoDetailsWidget(null) :
-          GitHubRepoDetailsWidget(gitHubObject as GitHubRepository);
-      case SearchType.users:
-        return gitHubObject == null ?
-          const GitHubUserDetailsWidget(null) :
-          GitHubUserDetailsWidget(gitHubObject as GitHubUser);
-      case SearchType.code:
-        return gitHubObject == null ?
-          const GitHubCodeDetailsWidget(null) :
-          GitHubCodeDetailsWidget(gitHubObject as GitHubCode);
-    }
   }
 }

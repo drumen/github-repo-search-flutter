@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:github_repo_search/github/bloc/search_bloc.dart';
 import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/github_code.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
@@ -28,7 +30,10 @@ class GitHubDetailsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(_getDetailsPageTitle(_searchType, _gitHubObject))),
-      body: Common.getDetailsWidget(_searchType, _gitHubObject),
+      body: BlocProvider(
+        create: (_) => SearchBloc(),
+        child: Common.getDetailsWidget(_searchType, _gitHubObject),
+      ),
     );
   }
 
@@ -40,6 +45,8 @@ class GitHubDetailsPage extends StatelessWidget {
         return (gitHubObject as GitHubUser).userName;
       case SearchType.code:
         return (gitHubObject as GitHubCode).name;
+      default:
+        return '';
     }
   }
 

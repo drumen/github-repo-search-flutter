@@ -22,6 +22,8 @@ class Common {
         return gitHubObject == null ?
         const GitHubCodeDetailsWidget(null) :
         GitHubCodeDetailsWidget(gitHubObject as GitHubCode);
+      default:
+        return Container();
     }
   }
 

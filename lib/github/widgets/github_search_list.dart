@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/bloc/search_bloc.dart';
 import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/github_code.dart';
+import 'package:github_repo_search/github/models/github_rate_limit.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
@@ -46,16 +47,14 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         if (widget._query == '') {
-          return Center(
-            child: Text(
-              state.searchResults.item1.longPrintingString ?? '',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 18,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          );
+          return _getHintAndInfoMessage(state);
+        }
+        if (state.rateLimits.remaining == 0) {
+          String message = 'Slow down there a bit fellow...\n'
+                           'Query rate limit was exceeded.\n'
+                           'Hold on a bit and you will\n'
+                           'be able to search again.';
+          return _getHintAndInfoMessage(state, message: message);
         }
         switch (state.status) {
           case SearchStatus.queryRateExceeded:
@@ -71,27 +70,10 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
               ),
             );
           case SearchStatus.failure:
-            return Center(
-              child: Text(
-                state.searchResults.item1.longPrintingString ?? '',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            );
+            return _getHintAndInfoMessage(state);
           case SearchStatus.success:
             if (state.searchResults.item2.isEmpty) {
-              return const Center(
-                child: Text(
-                  'No results found.',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontStyle: FontStyle.italic,
-                  ),
-                )
-              );
+              return _getHintAndInfoMessage(state, message: 'No results found.');
             } else {
               return Column(
                 children: <Widget>[
@@ -116,20 +98,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
                       controller: _scrollController,
                     ),
                   ),
-                  Container(
-                    height: 42,
-                    width: double.infinity,
-                    color: Colors.lightBlue[800],
-                    child: Text(
-                      'Query limit per minute: ${state.rateLimits.limit}     Queries used: ${state.rateLimits.used}\n'
-                      'Queries left: ${state.rateLimits.remaining}     Reseting in: '
-                      '${Common.getSecondsTillReset(state.rateLimits.reset)}',
-                      style: const TextStyle(color: Colors.white, fontSize: 17),
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
+                  _buildRateLimitsTextBox(state.rateLimits),
                 ]
               );
             }
@@ -189,5 +158,43 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
       default:
         return Container();
     }
+  }
+
+  Widget _buildRateLimitsTextBox(GitHubRateLimit rateLimits) {
+    return Container(
+      height: 42,
+      width: double.infinity,
+      color: Colors.lightBlue[800],
+      child: Text(
+        'Query limit per minute: ${rateLimits.limit}     Queries used: ${rateLimits.used}\n'
+            'Queries left: ${rateLimits.remaining}     Reseting in: '
+            '${Common.getSecondsTillReset(rateLimits.reset)}',
+        style: const TextStyle(color: Colors.white, fontSize: 17),
+        textAlign: TextAlign.center,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  Widget _getHintAndInfoMessage(SearchState state, {String? message}) {
+    return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Flexible(
+            child: Center(
+              child: Text(
+                message ?? state.searchResults.item1.longPrintingString ?? '',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          ),
+          _buildRateLimitsTextBox(state.rateLimits),
+        ]
+    );
   }
 }

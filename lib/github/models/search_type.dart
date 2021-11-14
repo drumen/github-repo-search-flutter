@@ -1,4 +1,4 @@
-enum SearchType { repositories, users, code, realName }
+enum SearchType { repositories, users, code}
 
 extension ParseToString on SearchType {
   String toShortString() {

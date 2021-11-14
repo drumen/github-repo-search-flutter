@@ -21,7 +21,6 @@ String gitHubPublicAccessToken = dotenv.get('GITHUB_PERSONAL_ACCESS_TOKEN');
 const _host = 'https://api.github.com';
 const _searchRoot = '/search/';
 const _rateLimitRoot = '/rate_limit';
-const _rateNameRoot = '/users/';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc() : super(const SearchState()) {
@@ -62,7 +61,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             searchResults: Tuple2(queryResults.item1, queryResults.item2),
             hasReachedMax: true,
             rateLimits: queryResults.item3,
-            realName: queryResults.item4,
           ));
         } else {
           return emit(state.copyWith(
@@ -70,7 +68,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             searchResults: Tuple2(queryResults.item1, queryResults.item2),
             hasReachedMax: false,
             rateLimits: queryResults.item3,
-            realName: queryResults.item4,
           ));
         }
       }
@@ -91,7 +88,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
                         List.of(state.searchResults.item2)..addAll(queryResults.item2)),
                 hasReachedMax: false,
                 rateLimits: queryResults.item3,
-                realName: queryResults.item4,
               ),
             );
     } catch (_) {
@@ -99,7 +95,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
-  Future<Tuple4<SearchType, List<Object>, GitHubRateLimit, String>> _fetchGitHubRepos(
+  Future<Tuple3<SearchType, List<Object>, GitHubRateLimit>> _fetchGitHubRepos(
       String query,
       SearchType searchType,
       [int page = 1]) async {
@@ -113,16 +109,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     // Fetch query results
     try {
-      if (searchType != SearchType.realName) {
-        searchResponse = await httpClient.get(
-            _searchRoot + searchType.toShortString(),
-            queryParameters: queryParameters
-        );
-      } else {
-        searchResponse = await httpClient.get(
-            _rateNameRoot + query
-        );
-      }
+      searchResponse = await httpClient.get(
+          _searchRoot + searchType.toShortString(),
+          queryParameters: queryParameters
+      );
     } on DioError catch (e) {
       if (e.response != null) {
         log('Received GitHub query response with status code: ${e.response!.statusCode.toString()} '
@@ -153,15 +143,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         '(${limitResponse.statusMessage.toString()})');
 
     List<Object> searchList = [];
-    String realName = '';
 
     if (searchResponse.statusCode == 200) {
-      if (searchType != SearchType.realName) {
-        final items = searchResponse.data['items'] as List;
-        searchList = _processQueryResponse(items, searchType);
-      } else {
-        realName = searchResponse.data['name'];
-      }
+      final items = searchResponse.data['items'] as List;
+      searchList = _processQueryResponse(items, searchType);
     }
 
     GitHubRateLimit? rateLimits;
@@ -176,7 +161,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
     }
 
-    return Tuple4(searchType, searchList, rateLimits!, realName);
+    return Tuple3(searchType, searchList, rateLimits!);
   }
 
   List<Object> _processQueryResponse(List items, SearchType searchType) {
@@ -197,8 +182,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         searchList = items.map((dynamic json) {
           return GitHubCode.fromJson(json as Map<String, dynamic>);
         }).toList();
-        break;
-      default:
         break;
     }
 
@@ -236,8 +219,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           'per_page': '30',
           'page': '$page'
         };
-      default:
-        return <String, dynamic>{};
     }
   }
 }

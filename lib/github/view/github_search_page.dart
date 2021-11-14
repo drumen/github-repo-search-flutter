@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_repo_search/github/github.dart';
+import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
-import 'package:github_repo_search/github/view/github_repo_details_page.dart';
-import 'package:github_repo_search/github/widgets/github_repo_details.dart';
+import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
+import 'package:github_repo_search/github/widgets/github_search_list.dart';
+
+import 'github_details_page.dart';
 
 class GitHubSearchPage extends StatefulWidget {
   const GitHubSearchPage({Key? key}) : super(key: key);
@@ -44,9 +46,12 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                             hintText: _searchType.shortPrintingString,
                           ),
                           onChanged: (query) {
-                            _currentQuery = query;
-                            context.read<SearchBloc>().add(FetchQuery(
-                                query, _searchType, true));
+                            if (_currentQuery != query) {
+                              _currentQuery = query;
+                              context.read<SearchBloc>().add(FetchQuery(
+                                  query, _searchType, true)
+                              );
+                            }
                           },
                         ),
                       ),
@@ -62,9 +67,10 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                   onChanged: (value) {
                                     _searchType = value as SearchType;
                                     _selectedObject = null;
-                                    setState(() {});
-                                    context.read<SearchBloc>().add(FetchQuery(
-                                        _currentQuery, _searchType, true));
+                                    setState(() {
+                                      context.read<SearchBloc>().add(FetchQuery(
+                                          _currentQuery, _searchType, true));
+                                    });
                                   }
                               ),
                               const Text('Repo'),
@@ -74,9 +80,10 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                   onChanged: (value) {
                                     _searchType = value as SearchType;
                                     _selectedObject = null;
-                                    setState(() {});
-                                    context.read<SearchBloc>().add(FetchQuery(
+                                    setState(() {
+                                      context.read<SearchBloc>().add(FetchQuery(
                                         _currentQuery, _searchType, true));
+                                    });
                                   }
                               ),
                               const Text('User'),
@@ -86,9 +93,10 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                   onChanged: (value) {
                                     _searchType = value as SearchType;
                                     _selectedObject = null;
-                                    setState(() {});
-                                    context.read<SearchBloc>().add(FetchQuery(
-                                        _currentQuery, _searchType, true));
+                                    setState(() {
+                                      context.read<SearchBloc>().add(FetchQuery(
+                                          _currentQuery, _searchType, true));
+                                    });
                                   }
                               ),
                               const Text('Code'),
@@ -113,14 +121,14 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                            _selectedObject = gitHubObject;
                            Navigator.push(context, MaterialPageRoute(
                              builder: (context) {
-                               return _getDetailsPage(_searchType, gitHubObject);
+                               return GitHubDetailsPage(_searchType, gitHubObject);
                              },
                            ));
                          }
                      }),
                    ),
                    _isLargeScreen ?
-                     Expanded(child: _getDetailsWidget(_searchType, _selectedObject)) :
+                     Expanded(child: Common.getDetailsWidget(_searchType, _selectedObject)) :
                      Container(),
                   ]);
                 }),
@@ -129,33 +137,5 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
           ),
       ),
     );
-  }
-
-  Widget _getDetailsPage(SearchType searchType, Object gitHubObject) {
-    switch (searchType) {
-      case SearchType.repositories:
-        return GitHubRepoDetailsPage(gitHubObject as GitHubRepository);
-      case SearchType.users:
-        return GitHubUserDetailsPage(gitHubObject as GitHubUser);
-      case SearchType.code:
-        return GitHubCodeDetailsPage(gitHubObject as GitHubCode);
-    }
-  }
-
-  _getDetailsWidget(SearchType searchType, Object? gitHubObject) {
-    switch (searchType) {
-      case SearchType.repositories:
-        return gitHubObject == null ?
-          GitHubRepoDetailsWidget(null) :
-          GitHubRepoDetailsWidget(gitHubObject as GitHubRepository);
-      case SearchType.users:
-        return gitHubObject == null ?
-          const GitHubUserDetailsWidget(null) :
-          GitHubUserDetailsWidget(gitHubObject as GitHubUser);
-      case SearchType.code:
-        return gitHubObject == null ?
-          const GitHubCodeDetailsWidget(null) :
-          GitHubCodeDetailsWidget(gitHubObject as GitHubCode);
-    }
   }
 }

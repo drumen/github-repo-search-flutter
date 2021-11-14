@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:github_repo_search/github/github.dart';
+import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:intl/intl.dart';
 
 class GitHubRepoListItem extends StatelessWidget {

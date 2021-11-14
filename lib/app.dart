@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'github/bloc/search_bloc.dart';
+import 'github/search_bloc/search_bloc.dart';
 import 'github/view/github_search_page.dart';
 
 class App extends StatelessWidget {

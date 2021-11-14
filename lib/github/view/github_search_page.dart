@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_repo_search/github/bloc/search_bloc.dart';
 import 'package:github_repo_search/github/common/common.dart';
-import 'package:github_repo_search/github/github.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
+import 'package:github_repo_search/github/search_bloc/search_bloc.dart';
 import 'package:github_repo_search/github/widgets/github_search_list.dart';
 
 import 'github_details_page.dart';

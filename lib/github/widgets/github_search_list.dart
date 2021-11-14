@@ -8,12 +8,12 @@ import 'package:github_repo_search/github/models/github_rate_limit.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
-import 'package:github_repo_search/github/search_bloc/search_bloc.dart';
+import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
 
 import 'bottom_loader.dart';
-import 'github_code_list_item.dart';
-import 'github_repo_list_item.dart';
-import 'github_user_list_item.dart';
+import 'list_items/github_code_list_item.dart';
+import 'list_items/github_repo_list_item.dart';
+import 'list_items/github_user_list_item.dart';
 
 typedef ObjectSelectedCallback = Null Function(Object gitHubResult);
 
@@ -53,7 +53,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
         if (widget._query == '') {
           return _getHintAndInfoMessage(state);
         }
-        if (state.rateLimits.remaining == 0) {
+        if (state.rateLimits.remaining == 0 && state.rateLimits.reset != 0) {
           String message = 'Slow down there a bit fellow...\n'
                            'Query rate limit was exceeded.\n'
                            'Hold on a bit and you will\n'

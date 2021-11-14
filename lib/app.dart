@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'github/search_bloc/search_bloc.dart';
-import 'github/user_bloc/user_bloc.dart';
+import 'github/bloc_search/search_bloc.dart';
+import 'github/bloc_user/user_bloc.dart';
 import 'github/view/github_search_page.dart';
 
 

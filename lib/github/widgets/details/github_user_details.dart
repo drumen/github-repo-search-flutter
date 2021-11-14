@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
-import 'package:github_repo_search/github/user_bloc/user_bloc.dart';
+import 'package:github_repo_search/github/bloc_user/user_bloc.dart';
 
 class GitHubUserDetailsWidget extends StatefulWidget {
   const GitHubUserDetailsWidget(this._gitHubUser, {Key? key}) : super(key: key);

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
-import 'package:github_repo_search/github/models/search_type.dart';
-import 'package:github_repo_search/github/search_bloc/search_bloc.dart';
+import 'package:github_repo_search/github/user_bloc/user_bloc.dart';
 
 class GitHubUserDetailsWidget extends StatefulWidget {
   const GitHubUserDetailsWidget(this._gitHubUser, {Key? key}) : super(key: key);
@@ -15,24 +14,23 @@ class GitHubUserDetailsWidget extends StatefulWidget {
 
 class _GitHubUserDetailsWidgetState extends State<GitHubUserDetailsWidget> {
 
-  late SearchBloc _postBloc;
+  late UserBloc _postBloc;
   String _oldName = '';
 
   @override
   void initState() {
     super.initState();
-    _postBloc = context.read<SearchBloc>();
+    _postBloc = context.read<UserBloc>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchBloc, SearchState>(
+    return BlocBuilder<UserBloc, UserState>(
       builder: (context, state) {
         if (widget._gitHubUser == null) {
           return Container();
         } else if ( _oldName != widget._gitHubUser!.userName) {
-          _postBloc.add(FetchQuery(
-              widget._gitHubUser!.userName, SearchType.realName, false));
+          _postBloc.add(FetchUser(widget._gitHubUser!.userName));
           _oldName = widget._gitHubUser!.userName;
         }
         return Scaffold(

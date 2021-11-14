@@ -6,7 +6,7 @@ import 'package:github_repo_search/github/models/github_code.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
-import 'package:github_repo_search/github/search_bloc/search_bloc.dart';
+import 'package:github_repo_search/github/user_bloc/user_bloc.dart';
 
 bool _wasLargeScreen = false;
 
@@ -31,7 +31,7 @@ class GitHubDetailsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(_getDetailsPageTitle(_searchType, _gitHubObject))),
       body: BlocProvider(
-        create: (_) => SearchBloc(),
+        create: (_) => UserBloc(),
         child: Common.getDetailsWidget(_searchType, _gitHubObject),
       ),
     );

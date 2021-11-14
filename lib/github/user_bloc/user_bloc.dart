@@ -70,7 +70,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     log('Received GitHub query response with status code: ${userResponse!.statusCode.toString()} '
         '(${userResponse.statusMessage.toString()})');
 
-    realName = userResponse.data['name'];
+    if (userResponse.data['name'] != null) {
+      realName = userResponse.data['name'];
+    } else {
+      realName = '<no name>';
+    }
 
     log('Fetched real name: $realName for username: $userName');
 

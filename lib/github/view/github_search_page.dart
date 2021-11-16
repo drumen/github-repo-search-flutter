@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
@@ -26,7 +28,10 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
     _isLargeScreen = MediaQuery.of(context).size.width > 700;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('GitHub Search')),
+      appBar: AppBar(
+        title: const Text('GitHub Search'),
+        actions: [ _getLanguageSelectionAction() ],
+      ),
       body: BlocBuilder<SearchBloc, SearchState>(
         builder: (context, state) =>
           Column(
@@ -136,6 +141,33 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
             ],
           ),
       ),
+    );
+  }
+
+  Widget _getLanguageSelectionAction() {
+    return  PopupMenuButton<String>(
+      icon: const Icon(Icons.language),
+      onSelected: (String result) {
+        switch (result) {
+          case 'en':
+            log('English language selected');
+            break;
+          case 'hr':
+            log('Croatian language selected');
+            break;
+          default:
+        }
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        const PopupMenuItem<String>(
+          value: 'en',
+          child: Text('English'),
+        ),
+        const PopupMenuItem<String>(
+          value: 'hr',
+          child: Text('Hrvatski'),
+        ),
+      ],
     );
   }
 }

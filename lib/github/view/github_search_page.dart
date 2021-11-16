@@ -43,7 +43,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                         child:TextField(
                           decoration: InputDecoration(
                             border: const OutlineInputBorder(),
-                            hintText: _searchType.shortPrintingString,
+                            labelText: _searchType.shortPrintingString,
                           ),
                           onChanged: (query) {
                             if (_currentQuery != query) {

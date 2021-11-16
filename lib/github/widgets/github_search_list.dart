@@ -121,7 +121,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
     if (!_scrollController.hasClients) return false;
     final maxScroll = _scrollController.position.maxScrollExtent;
     final currentScroll = _scrollController.offset;
-    return currentScroll >= (maxScroll * 0.9);
+    return currentScroll >= maxScroll;
   }
 
   Widget _searchTypeListItem(

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:intl/intl.dart';
+
 import 'package:github_repo_search/github/models/github_code.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
-import 'package:intl/intl.dart';
 
 class BuildDetailsWidget {
 
@@ -36,9 +38,9 @@ class BuildDetailsWidget {
 
                     // USERNAME
                     const SizedBox(width: 0, height: 15),
-                    const Text(
-                      'Username:',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                    Text(
+                      'username:'.tr(),
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(width: 0, height: 5),
                     Text(
@@ -48,9 +50,9 @@ class BuildDetailsWidget {
                     const SizedBox(width: 0, height: 30),
 
                     // REAL NAME
-                    const Text(
-                      'Real name:',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                    Text(
+                      'realName:'.tr(),
+                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(width: 0, height: 5),
                     Text(

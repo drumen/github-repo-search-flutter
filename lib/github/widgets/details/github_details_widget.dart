@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:github_repo_search/github/bloc_user/user_bloc.dart';
 import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/github_code.dart';
@@ -23,6 +25,7 @@ class _GitHubDetailsWidgetState extends State<GitHubDetailsWidget> {
   late UserBloc _postBloc;
   String _oldName = '';
   String? _userName = '';
+  String _realName = '';
 
   @override
   void initState() {
@@ -45,24 +48,30 @@ class _GitHubDetailsWidgetState extends State<GitHubDetailsWidget> {
             _oldName = _userName!;
           }
 
+          if (state.realName != '[no name]') {
+            _realName = state.realName;
+          } else {
+            _realName = 'noName'.tr();
+          }
+
           switch (widget._searchType) {
             case SearchType.repositories:
               return BuildDetailsWidget().buildRepositoryDetails(
                   context,
                   (widget._gitHubObject) as GitHubRepository,
-                  state.realName
+                  _realName
               );
             case SearchType.users:
               return BuildDetailsWidget().buildUserDetails(
                   context,
                   (widget._gitHubObject) as GitHubUser,
-                  state.realName
+                  _realName
               );
             case SearchType.code:
               return BuildDetailsWidget().buildCodeDetails(
                   context,
                   (widget._gitHubObject) as GitHubCode,
-                  state.realName
+                  _realName
               );
           }
         }

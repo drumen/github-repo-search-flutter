@@ -1,7 +1,10 @@
-import 'dart:developer';
+import 'dart:developer' as dev;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
 import 'package:github_repo_search/github/widgets/details/github_details_widget.dart';
@@ -29,7 +32,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('GitHub Search'),
+        title: const Text('appName').tr(),
         actions: [ _getLanguageSelectionAction() ],
       ),
       body: BlocBuilder<SearchBloc, SearchState>(
@@ -146,14 +149,17 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
 
   Widget _getLanguageSelectionAction() {
     return  PopupMenuButton<String>(
+      offset: Offset.fromDirection(pi/2, 50),
       icon: const Icon(Icons.language),
       onSelected: (String result) {
         switch (result) {
           case 'en':
-            log('English language selected');
+            dev.log('English language selected');
+            context.setLocale(const Locale('en'));
             break;
           case 'hr':
-            log('Croatian language selected');
+            dev.log('Croatian language selected');
+            context.setLocale(const Locale('hr'));
             break;
           default:
         }

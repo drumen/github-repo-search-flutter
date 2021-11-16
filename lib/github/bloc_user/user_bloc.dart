@@ -73,7 +73,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (userResponse.data['name'] != null) {
       realName = userResponse.data['name'];
     } else {
-      realName = '<no name>';
+      realName = '[no name]';
     }
 
     log('Fetched real name: $realName for username: $userName');

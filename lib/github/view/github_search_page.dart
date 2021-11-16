@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:github_repo_search/github/common/common.dart';
-import 'package:github_repo_search/github/models/search_type.dart';
 import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
+import 'package:github_repo_search/github/models/search_type.dart';
+import 'package:github_repo_search/github/widgets/details/github_details_widget.dart';
 import 'package:github_repo_search/github/widgets/github_search_list.dart';
 
 import 'github_details_page.dart';
@@ -128,7 +128,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                      }),
                    ),
                    _isLargeScreen ?
-                     Expanded(child: Common.getDetailsWidget(_searchType, _selectedObject)) :
+                     Expanded(child: GitHubDetailsWidget(_searchType, _selectedObject)) :
                      Container(),
                   ]);
                 }),

@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
 import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/github_code.dart';
 import 'package:github_repo_search/github/models/github_rate_limit.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
-import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
 
 import 'bottom_loader.dart';
 import 'list_items/github_code_list_item.dart';

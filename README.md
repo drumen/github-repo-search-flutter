@@ -30,6 +30,10 @@ is implemented.
 
 App is tested on Android and Chrome.
 
+## Note
+
+Changes from the last commit are not in the GIF video.
+
 ## Screen recording and screenshots
 
 <p align="center"><img src="recording-web.gif"></p>

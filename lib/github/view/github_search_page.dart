@@ -151,6 +151,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
     return  PopupMenuButton<String>(
       offset: Offset.fromDirection(pi/2, 50),
       icon: const Icon(Icons.language),
+      tooltip: 'selectLanguage'.tr(),
       onSelected: (String result) {
         switch (result) {
           case 'en':

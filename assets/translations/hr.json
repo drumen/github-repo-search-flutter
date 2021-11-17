@@ -1,6 +1,8 @@
 {
   "appName": "GitHub tražilica",
 
+  "selectLanguage": "Odabir jezika",
+
   "searchFor:": "Traži:",
   "repo": "Repozitorij",
   "user": "Korisnika",

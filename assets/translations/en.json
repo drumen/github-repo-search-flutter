@@ -1,6 +1,8 @@
 {
   "appName": "GitHub Search",
 
+  "selectLanguage": "Language selection",
+
   "searchFor:": "Search for:",
   "repo": "Repo",
   "user": "User",

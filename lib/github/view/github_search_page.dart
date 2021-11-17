@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer' as dev;
 import 'dart:math';
 
@@ -7,6 +8,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
 import 'package:github_repo_search/github/common/common.dart';
+import 'package:github_repo_search/github/models/github_rate_limit.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
 import 'package:github_repo_search/github/widgets/details/github_details_widget.dart';
 import 'package:github_repo_search/github/widgets/github_search_list.dart';
@@ -25,6 +27,9 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
   String _currentQuery = '';
   Object? _selectedObject;
   SearchType _searchType = SearchType.repositories;
+  late Timer _timer;
+  late int _resetTime;
+  FocusNode _textFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +59,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                             labelText: _searchType.shortPrintingString!.tr(),
                           ),
                           textInputAction: TextInputAction.search,
+                          focusNode: _textFocusNode,
                           onSubmitted: (query) {
                             if (_currentQuery != query) {
                               _currentQuery = query;
@@ -61,6 +67,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                   query, _searchType, true)
                               );
                             }
+                            _textFocusNode.requestFocus();
                           },
                         ),
                       ),
@@ -142,10 +149,78 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                   ]);
                 }),
               ),
+              _buildRateLimitsTextBox(state.rateLimits),
             ],
           ),
       ),
     );
+  }
+
+  Widget _buildRateLimitsTextBox(GitHubRateLimit rateLimits) {
+    _resetTime = Common.getSecondsTillReset(rateLimits.reset);
+    _startTimer();
+    bool isLargeScreen = MediaQuery.of(context).size.width > Common.largeScreenSize;
+
+    return Container(
+      padding: isLargeScreen ?
+      const EdgeInsets.symmetric() : const EdgeInsets.symmetric(horizontal: 25.0),
+      height: 42,
+      width: double.infinity,
+      color: Theme.of(context).primaryColor,
+
+      child: Row(
+        children: [
+          _buildPerScreenSize(isLargeScreen),
+          Expanded(
+            flex: 4,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildQueryRatesTexts(
+                        'queryLimitPerMinute: ', rateLimits.limit),
+                    _buildQueryRatesTexts('queriesUsed: ', rateLimits.used),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'resettingIn: '.tr() +
+                          _resetTime.toString() +
+                          ' seconds'.tr(),
+                      style:
+                      const TextStyle(color: Colors.white, fontSize: 15),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    _buildQueryRatesTexts('queriesLeft: ', rateLimits.remaining),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          _buildPerScreenSize(isLargeScreen),
+        ],
+      ),
+    );
+  }
+
+  _buildQueryRatesTexts(String text, int value) {
+    return Text(
+      text.tr() + value.toString(),
+      style: const TextStyle(color: Colors.white, fontSize: 15),
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget _buildPerScreenSize(bool isLargeScreen) {
+    return isLargeScreen ? Expanded( child: Container() ) : Container();
   }
 
   Widget _getLanguageSelectionAction() {
@@ -176,6 +251,24 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
           child: Text('Hrvatski'),
         ),
       ],
+    );
+  }
+
+  void _startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (_resetTime == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _resetTime--;
+          });
+        }
+      },
     );
   }
 }

@@ -1,13 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
-import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/github_code.dart';
-import 'package:github_repo_search/github/models/github_rate_limit.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
@@ -38,8 +34,6 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
 
   final _scrollController = ScrollController();
   late SearchBloc _postBloc;
-  late Timer _timer;
-  late int _resetTime;
 
   @override
   void initState() {
@@ -89,7 +83,6 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
                       controller: _scrollController,
                     ),
                   ),
-                  _buildRateLimitsTextBox(state.rateLimits),
                 ]
               );
             }
@@ -102,7 +95,6 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
 
   @override
   void dispose() {
-    _timer.cancel();
     _scrollController
       ..removeListener(_onScroll)
       ..dispose();
@@ -152,112 +144,23 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
     }
   }
 
-  Widget _buildRateLimitsTextBox(GitHubRateLimit rateLimits) {
-    _resetTime = Common.getSecondsTillReset(rateLimits.reset);
-    _startTimer();
-    bool isLargeScreen = MediaQuery.of(context).size.width > Common.largeScreenSize;
-
-    return Container(
-      padding: isLargeScreen ?
-        const EdgeInsets.symmetric(horizontal: 20.0) : const EdgeInsets.symmetric(),
-      height: 42,
-      width: double.infinity,
-      color: Theme.of(context).primaryColorDark,
-      child: Row(
-        children: [
-          _buildPerScreenSize(isLargeScreen),
-          Expanded(
-            flex: 15,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildQueryRatesTexts(
-                        'queryLimitPerMinute: ', rateLimits.limit),
-                    _buildQueryRatesTexts('queriesUsed: ', rateLimits.used),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'resettingIn: '.tr() +
-                          _resetTime.toString() +
-                          ' seconds'.tr(),
-                      style:
-                      const TextStyle(color: Colors.white, fontSize: 15),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    _buildQueryRatesTexts('queriesLeft: ', rateLimits.remaining),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          _buildPerScreenSize(isLargeScreen),
-        ],
-      ),
-    );
-  }
-
-  _buildQueryRatesTexts(String text, int value) {
-    return Text(
-      text.tr() + value.toString(),
-      style: const TextStyle(color: Colors.white, fontSize: 15),
-      textAlign: TextAlign.center,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    );
-  }
-
-  Widget _buildPerScreenSize(bool isLargeScreen) {
-    return isLargeScreen ?
-      Container() :
-      Expanded(
-        child: Container(),
-      );
-  }
-
   Widget _getHintAndInfoMessage(SearchState state, {String? message}) {
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Flexible(
-            child: Center(
-              child: Text(
-                message ?? state.searchResults.item1.longPrintingString?.tr() ?? '',
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontStyle: FontStyle.italic,
-                ),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        Flexible(
+          child: Center(
+            child: Text(
+              message ?? state.searchResults.item1.longPrintingString?.tr() ?? '',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 18,
+                fontStyle: FontStyle.italic,
               ),
             ),
           ),
-          _buildRateLimitsTextBox(state.rateLimits),
-        ]
-    );
-  }
-
-  void _startTimer() {
-    const oneSec = Duration(seconds: 1);
-    _timer = Timer.periodic(
-      oneSec,
-          (Timer timer) {
-        if (_resetTime == 0) {
-          setState(() {
-            timer.cancel();
-          });
-        } else {
-          setState(() {
-            _resetTime--;
-          });
-        }
-      },
+        ),
+      ]
     );
   }
 }

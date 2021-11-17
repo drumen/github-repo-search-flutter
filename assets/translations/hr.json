@@ -32,5 +32,14 @@
   "filePath:": "Putanja datoteke:",
 
   "[noName]": "[nema imena]",
-  "[no description]": "[nema opisa]"
+  "[no description]": "[nema opisa]",
+
+  "queryLimitPerMinute: ": "Limit upita po minuti: ",
+  "queriesUsed: ": "Upita iskorišteno: ",
+  "queriesLeft: ": "Upita preostalo: ",
+  "resettingIn: ": "Resetiranje za: ",
+  " seconds": " sekunda(i)",
+
+  "noResultsFound": "Niti jedan rezultat nije pronađen.",
+  "exceeded": "Pomalo, pomalo...\nLimit broja upita je premašen.\nStrpite se malo i moći\nćete opet pretraživati.\n(provjerite brojač ispod)"
 }

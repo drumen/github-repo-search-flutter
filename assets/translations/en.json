@@ -32,5 +32,14 @@
   "filePath:": "File path:",
 
   "[noName]": "[no name]",
-  "[no description]": "[no description]"
+  "[no description]": "[no description]",
+
+  "queryLimitPerMinute: ": "Query limit per minute: ",
+  "queriesUsed: ": "Queries used: ",
+  "queriesLeft: ": "Queries left: ",
+  "resettingIn: ": "Resetting in: ",
+  " seconds": " second(s)",
+
+  "noResultsFound": "No results found.",
+  "exceeded": "Slow down there a bit fellow...\nQuery rate limit was exceeded.\nHold on a bit and you will\nbe able to search again.\n(check timer below)"
 }

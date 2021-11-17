@@ -56,11 +56,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
           return _getHintAndInfoMessage(state);
         }
         if (state.rateLimits.remaining == 0 && state.rateLimits.reset != 0) {
-          String message = 'Slow down there a bit fellow...\n'
-                           'Query rate limit was exceeded.\n'
-                           'Hold on a bit and you will\n'
-                           'be able to search again.\n'
-                           '(check timer below)';
+          String message = 'exceeded'.tr();
           return _getHintAndInfoMessage(state, message: message);
         }
         switch (state.status) {
@@ -68,7 +64,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
             return _getHintAndInfoMessage(state);
           case SearchStatus.success:
             if (state.searchResults.item2.isEmpty) {
-              return _getHintAndInfoMessage(state, message: 'No results found.');
+              return _getHintAndInfoMessage(state, message: 'noResultsFound'.tr());
             } else {
               return Column(
                 children: <Widget>[
@@ -165,9 +161,11 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
       width: double.infinity,
       color: Colors.lightBlue[800],
       child: Text(
-        'Query limit per minute: ${rateLimits.limit}     Queries used: ${rateLimits.used}\n'
-        'Queries left: ${rateLimits.remaining}     Reseting in: $_resetTime second(s)',
-        style: const TextStyle(color: Colors.white, fontSize: 17),
+        'queryLimitPerMinute: '.tr() + rateLimits.limit.toString() +
+          '      ' + 'queriesUsed: '.tr() + rateLimits.used.toString() +
+          '\n' + 'queriesLeft: '.tr() + rateLimits.remaining.toString() +
+          '      ' + 'resettingIn: '.tr() + _resetTime.toString() + ' seconds'.tr(),
+        style: const TextStyle(color: Colors.white, fontSize: 16),
         textAlign: TextAlign.center,
         maxLines: 2,
         overflow: TextOverflow.ellipsis,

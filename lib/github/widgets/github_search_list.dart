@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
 import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/github_code.dart';
@@ -54,11 +56,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
           return _getHintAndInfoMessage(state);
         }
         if (state.rateLimits.remaining == 0 && state.rateLimits.reset != 0) {
-          String message = 'Slow down there a bit fellow...\n'
-                           'Query rate limit was exceeded.\n'
-                           'Hold on a bit and you will\n'
-                           'be able to search again.\n'
-                           '(check timer below)';
+          String message = 'exceeded'.tr();
           return _getHintAndInfoMessage(state, message: message);
         }
         switch (state.status) {
@@ -66,7 +64,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
             return _getHintAndInfoMessage(state);
           case SearchStatus.success:
             if (state.searchResults.item2.isEmpty) {
-              return _getHintAndInfoMessage(state, message: 'No results found.');
+              return _getHintAndInfoMessage(state, message: 'noResultsFound'.tr());
             } else {
               return Column(
                 children: <Widget>[
@@ -157,20 +155,71 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
   Widget _buildRateLimitsTextBox(GitHubRateLimit rateLimits) {
     _resetTime = Common.getSecondsTillReset(rateLimits.reset);
     _startTimer();
+    bool isLargeScreen = MediaQuery.of(context).size.width > Common.largeScreenSize;
 
     return Container(
+      padding: isLargeScreen ?
+        const EdgeInsets.symmetric(horizontal: 20.0) : const EdgeInsets.symmetric(),
       height: 42,
       width: double.infinity,
       color: Colors.lightBlue[800],
-      child: Text(
-        'Query limit per minute: ${rateLimits.limit}     Queries used: ${rateLimits.used}\n'
-        'Queries left: ${rateLimits.remaining}     Reseting in: $_resetTime second(s)',
-        style: const TextStyle(color: Colors.white, fontSize: 17),
-        textAlign: TextAlign.center,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
+      child: Row(
+        children: [
+          _buildPerScreenSize(isLargeScreen),
+          Expanded(
+            flex: 15,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildQueryRatesTexts(
+                        'queryLimitPerMinute: ', rateLimits.limit),
+                    _buildQueryRatesTexts('queriesUsed: ', rateLimits.used),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'resettingIn: '.tr() +
+                          _resetTime.toString() +
+                          ' seconds'.tr(),
+                      style:
+                      const TextStyle(color: Colors.white, fontSize: 16),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    _buildQueryRatesTexts('queriesLeft: ', rateLimits.remaining),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          _buildPerScreenSize(isLargeScreen),
+        ],
       ),
     );
+  }
+
+  _buildQueryRatesTexts(String text, int value) {
+    return Text(
+      text.tr() + value.toString(),
+      style: const TextStyle(color: Colors.white, fontSize: 16),
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget _buildPerScreenSize(bool isLargeScreen) {
+    return isLargeScreen ?
+      Container() :
+      Expanded(
+        child: Container(),
+      );
   }
 
   Widget _getHintAndInfoMessage(SearchState state, {String? message}) {
@@ -180,7 +229,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
           Flexible(
             child: Center(
               child: Text(
-                message ?? state.searchResults.item1.longPrintingString ?? '',
+                message ?? state.searchResults.item1.longPrintingString?.tr() ?? '',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 18,

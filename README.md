@@ -32,7 +32,7 @@ App is tested on Android and Chrome.
 
 ## Note
 
-Changes from the last commit are not in the GIF video.
+GIF screen recording and screenshots are not up to date with the latest commits.
 
 ## Screen recording and screenshots
 

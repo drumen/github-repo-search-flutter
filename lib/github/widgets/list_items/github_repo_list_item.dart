@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import 'package:github_repo_search/github/models/github_repository.dart';
 
 class GitHubRepoListItem extends StatelessWidget {
   GitHubRepoListItem(
@@ -30,7 +32,7 @@ class GitHubRepoListItem extends StatelessWidget {
         title: RichText(
           overflow: TextOverflow.ellipsis,
           text: TextSpan(
-            text: 'Repo name: ',
+            text: 'repoName: '.tr(),
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
@@ -50,7 +52,7 @@ class GitHubRepoListItem extends StatelessWidget {
         isThreeLine: true,
         subtitle: RichText(
           text: TextSpan(
-            text: 'Updated: ',
+            text: 'updated: '.tr(),
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,

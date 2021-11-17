@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github_repo_search/github/bloc_user/user_bloc.dart';
+import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/github_code.dart';
 import 'package:github_repo_search/github/models/github_repository.dart';
 import 'package:github_repo_search/github/models/github_user.dart';
@@ -18,15 +19,15 @@ class GitHubDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool _isLargeScreen = MediaQuery.of(context).size.width > 700;
+    bool isLargeScreen = MediaQuery.of(context).size.width > Common.largeScreenSize;
 
-    if (_isLargeScreen && !_wasLargeScreen) {
+    if (isLargeScreen && !_wasLargeScreen) {
       SchedulerBinding.instance!.addPostFrameCallback((_) {
         Navigator.pop(context);
       });
     }
 
-    _wasLargeScreen = _isLargeScreen;
+    _wasLargeScreen = isLargeScreen;
 
     return Scaffold(
       appBar: AppBar(title: Text(_getDetailsPageTitle(_searchType, _gitHubObject))),

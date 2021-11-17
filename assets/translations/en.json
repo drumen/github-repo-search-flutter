@@ -1,0 +1,47 @@
+{
+  "appName": "GitHub Search",
+
+  "selectLanguage": "Language selection",
+
+  "searchFor:": "Search for:",
+  "repo": "Repo",
+  "user": "User",
+  "code": "Code",
+
+  "enterRepoShort": "Enter GitHub repository name...",
+  "enterUserShort": "Enter name of GitHub user...",
+  "enterCodeShort": "Enter part of GitHub code...",
+
+  "enterRepoLong": "Enter GitHub repository name\nyou are searching for...",
+  "enterUserLong": "Enter name of GitHub user\nyou are searching for...",
+  "enterCodeLong": "Enter part of GitHub code\nyou are searching for...",
+
+  "repoName: ": "Repo name: ",
+  "updated: ": "Updated: ",
+  "username: ": "Username: ",
+  "type: ": "Type: ",
+  "fileName: ": "File name: ",
+  "repository: ": "Repository: ",
+
+  "repositoryName:": "Repository name:",
+  "lastUpdatedTime:": "Last updated time:",
+  "ownerName:": "Owner name:",
+  "ownersRealName:": "Owners real name:",
+  "description:": "Description:",
+  "username:": "Username:",
+  "realName:": "Real name:",
+  "type:": "Type:",
+  "filePath:": "File path:",
+
+  "[noName]": "[no name]",
+  "[no description]": "[no description]",
+
+  "queryLimitPerMinute: ": "Query limit per minute: ",
+  "queriesUsed: ": " Queries used: ",
+  "queriesLeft: ": " Queries left: ",
+  "resettingIn: ": "Resetting in: ",
+  " seconds": " second(s)",
+
+  "noResultsFound": "No results found.",
+  "exceeded": "Slow down there a bit fellow...\nQuery rate limit was exceeded.\nHold on a bit and you will\nbe able to search again.\n(check timer below)"
+}

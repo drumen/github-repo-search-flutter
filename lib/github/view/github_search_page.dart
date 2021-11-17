@@ -1,6 +1,12 @@
+import 'dart:developer' as dev;
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
+import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
 import 'package:github_repo_search/github/widgets/details/github_details_widget.dart';
 import 'package:github_repo_search/github/widgets/github_search_list.dart';
@@ -17,16 +23,18 @@ class GitHubSearchPage extends StatefulWidget {
 class _GitHubSearchPageState extends State<GitHubSearchPage> {
 
   String _currentQuery = '';
-  bool _isLargeScreen = false;
   Object? _selectedObject;
   SearchType _searchType = SearchType.repositories;
 
   @override
   Widget build(BuildContext context) {
-    _isLargeScreen = MediaQuery.of(context).size.width > 700;
+    bool isLargeScreen = MediaQuery.of(context).size.width > Common.largeScreenSize;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('GitHub Search')),
+      appBar: AppBar(
+        title: const Text('appName').tr(),
+        actions: [ _getLanguageSelectionAction() ],
+      ),
       body: BlocBuilder<SearchBloc, SearchState>(
         builder: (context, state) =>
           Column(
@@ -35,7 +43,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                 padding: const EdgeInsets.all(10.0),
                 child: OrientationBuilder(builder: (context, orientation) {
                   return Flex(
-                    direction: _isLargeScreen ? Axis.horizontal : Axis.vertical,
+                    direction: isLargeScreen ? Axis.horizontal : Axis.vertical,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Flexible(
@@ -43,7 +51,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                         child:TextField(
                           decoration: InputDecoration(
                             border: const OutlineInputBorder(),
-                            labelText: _searchType.shortPrintingString,
+                            labelText: _searchType.shortPrintingString!.tr(),
                           ),
                           onChanged: (query) {
                             if (_currentQuery != query) {
@@ -60,7 +68,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                         child:Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              const Text('Search for:'),
+                              const Text('searchFor:').tr(),
                               Radio(
                                   value: SearchType.repositories,
                                   groupValue: _searchType,
@@ -73,7 +81,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                     });
                                   }
                               ),
-                              const Text('Repo'),
+                              const Text('repo').tr(),
                               Radio(
                                   value: SearchType.users,
                                   groupValue: _searchType,
@@ -86,7 +94,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                     });
                                   }
                               ),
-                              const Text('User'),
+                              const Text('user').tr(),
                               Radio(
                                   value: SearchType.code,
                                   groupValue: _searchType,
@@ -99,7 +107,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                     });
                                   }
                               ),
-                              const Text('Code'),
+                              const Text('code').tr(),
                             ],
                           ),
                         ),
@@ -113,7 +121,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                    Expanded(
                      child: GitHubSearchList(
                        _currentQuery, _searchType, (gitHubObject) {
-                         if (_isLargeScreen) {
+                         if (isLargeScreen) {
                            _selectedObject = gitHubObject;
                            setState(() {});
                          }
@@ -127,7 +135,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                          }
                      }),
                    ),
-                   _isLargeScreen ?
+                   isLargeScreen ?
                      Expanded(child: GitHubDetailsWidget(_searchType, _selectedObject)) :
                      Container(),
                   ]);
@@ -136,6 +144,37 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
             ],
           ),
       ),
+    );
+  }
+
+  Widget _getLanguageSelectionAction() {
+    return  PopupMenuButton<String>(
+      offset: Offset.fromDirection(pi/2, 50),
+      icon: const Icon(Icons.language),
+      tooltip: 'selectLanguage'.tr(),
+      onSelected: (String result) {
+        switch (result) {
+          case 'en':
+            dev.log('English language selected');
+            context.setLocale(const Locale('en'));
+            break;
+          case 'hr':
+            dev.log('Croatian language selected');
+            context.setLocale(const Locale('hr'));
+            break;
+          default:
+        }
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        const PopupMenuItem<String>(
+          value: 'en',
+          child: Text('English'),
+        ),
+        const PopupMenuItem<String>(
+          value: 'hr',
+          child: Text('Hrvatski'),
+        ),
+      ],
     );
   }
 }

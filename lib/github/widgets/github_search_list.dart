@@ -162,7 +162,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
         const EdgeInsets.symmetric(horizontal: 20.0) : const EdgeInsets.symmetric(),
       height: 42,
       width: double.infinity,
-      color: Colors.lightBlue[800],
+      color: Theme.of(context).primaryColorDark,
       child: Row(
         children: [
           _buildPerScreenSize(isLargeScreen),
@@ -187,7 +187,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
                           _resetTime.toString() +
                           ' seconds'.tr(),
                       style:
-                      const TextStyle(color: Colors.white, fontSize: 16),
+                      const TextStyle(color: Colors.white, fontSize: 15),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -207,7 +207,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
   _buildQueryRatesTexts(String text, int value) {
     return Text(
       text.tr() + value.toString(),
-      style: const TextStyle(color: Colors.white, fontSize: 16),
+      style: const TextStyle(color: Colors.white, fontSize: 15),
       textAlign: TextAlign.center,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,

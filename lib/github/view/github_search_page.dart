@@ -53,7 +53,8 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                             border: const OutlineInputBorder(),
                             labelText: _searchType.shortPrintingString!.tr(),
                           ),
-                          onChanged: (query) {
+                          textInputAction: TextInputAction.search,
+                          onSubmitted: (query) {
                             if (_currentQuery != query) {
                               _currentQuery = query;
                               context.read<SearchBloc>().add(FetchQuery(

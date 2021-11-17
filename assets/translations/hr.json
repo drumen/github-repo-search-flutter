@@ -1,8 +1,36 @@
 {
   "appName": "GitHub tražilica",
 
+  "searchFor:": "Traži:",
+  "repo": "Repozitorij",
+  "user": "Korisnika",
+  "code": "Kod",
+
+  "enterRepoShort": "Unesite ime GitHub repozitorija...",
+  "enterUserShort": "Unesite ime GitHub korisnika...",
+  "enterCodeShort": "Unesite dio GitHub koda...",
+
+  "enterRepoLong": "Unesite ime GitHub repozitorija\nkojeg tražite...",
+  "enterUserLong": "Unesite ime GitHub korisnika\nkojeg tražite...",
+  "enterCodeLong": "Unesite dio GitHub koda\nkojeg tražite...",
+
+  "repoName: ": "Ime repozitorija: ",
+  "updated: ": "Uređivan: ",
+  "username: ": "Korisničko ime: ",
+  "type: ": "Tip: ",
+  "fileName: ": "Ime datoteke: ",
+  "repository: ": "Repozitorij: ",
+
+  "repositoryName:": "Ime repozitorija:",
+  "lastUpdatedTime:": "Zadnje ažurirano:",
+  "ownerName:": "Ime vlasnika:",
+  "ownersRealName:": "Puno ime vlasnika:",
+  "description:": "Opis:",
   "username:": "Korisničko ime:",
   "realName:": "Puno ime:",
+  "type:": "Tip:",
+  "filePath:": "Putanja datoteke:",
 
-  "noName": "[nema imena]"
+  "[noName]": "[nema imena]",
+  "[no description]": "[nema opisa]"
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:github_repo_search/github/models/github_user.dart';
 
 class GitHubUserListItem extends StatelessWidget {
@@ -26,7 +28,7 @@ class GitHubUserListItem extends StatelessWidget {
         title: RichText(
           overflow: TextOverflow.ellipsis,
           text: TextSpan(
-            text: 'Username: ',
+            text: 'username: '.tr(),
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
@@ -46,7 +48,7 @@ class GitHubUserListItem extends StatelessWidget {
         isThreeLine: true,
         subtitle: RichText(
           text: TextSpan(
-            text: 'Type: ',
+            text: 'type: '.tr(),
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,

@@ -51,7 +51,7 @@ class _GitHubDetailsWidgetState extends State<GitHubDetailsWidget> {
           if (state.realName != '[no name]') {
             _realName = state.realName;
           } else {
-            _realName = 'noName'.tr();
+            _realName = '[noName]'.tr();
           }
 
           switch (widget._searchType) {

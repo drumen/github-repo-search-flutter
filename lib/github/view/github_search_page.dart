@@ -51,7 +51,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                         child:TextField(
                           decoration: InputDecoration(
                             border: const OutlineInputBorder(),
-                            labelText: _searchType.shortPrintingString,
+                            labelText: _searchType.shortPrintingString!.tr(),
                           ),
                           onChanged: (query) {
                             if (_currentQuery != query) {
@@ -68,7 +68,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                         child:Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              const Text('Search for:'),
+                              const Text('searchFor:').tr(),
                               Radio(
                                   value: SearchType.repositories,
                                   groupValue: _searchType,
@@ -81,7 +81,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                     });
                                   }
                               ),
-                              const Text('Repo'),
+                              const Text('repo').tr(),
                               Radio(
                                   value: SearchType.users,
                                   groupValue: _searchType,
@@ -94,7 +94,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                     });
                                   }
                               ),
-                              const Text('User'),
+                              const Text('user').tr(),
                               Radio(
                                   value: SearchType.code,
                                   groupValue: _searchType,
@@ -107,7 +107,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                                     });
                                   }
                               ),
-                              const Text('Code'),
+                              const Text('code').tr(),
                             ],
                           ),
                         ),

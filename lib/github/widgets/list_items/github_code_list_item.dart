@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:github_repo_search/github/models/github_code.dart';
 
 class GitHubCodeListItem extends StatelessWidget {
@@ -26,7 +28,7 @@ class GitHubCodeListItem extends StatelessWidget {
         title: RichText(
           overflow: TextOverflow.ellipsis,
           text: TextSpan(
-            text: 'File name: ',
+            text: 'fileName: '.tr(),
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
@@ -46,7 +48,7 @@ class GitHubCodeListItem extends StatelessWidget {
         isThreeLine: true,
         subtitle: RichText(
           text: TextSpan(
-            text: 'Repository: ',
+            text: 'repository: '.tr(),
             style: const TextStyle(
               color: Colors.grey,
               fontSize: 14,

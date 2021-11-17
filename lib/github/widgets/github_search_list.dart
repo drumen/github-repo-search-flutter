@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
 import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/github_code.dart';
@@ -180,7 +182,7 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
           Flexible(
             child: Center(
               child: Text(
-                message ?? state.searchResults.item1.longPrintingString ?? '',
+                message ?? state.searchResults.item1.longPrintingString?.tr() ?? '',
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 18,

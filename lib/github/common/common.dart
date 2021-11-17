@@ -5,6 +5,8 @@ import 'package:github_repo_search/github/models/search_type.dart';
 
 class Common {
 
+  static const int largeScreenSize = 750;
+
   static String getUserName(SearchType searchType, Object? gitHubObject) {
     switch (searchType) {
       case SearchType.repositories:

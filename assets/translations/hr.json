@@ -37,9 +37,9 @@
   "[no description]": "[nema opisa]",
 
   "queryLimitPerMinute: ": "Limit upita po minuti: ",
-  "queriesUsed: ": "Upita iskorišteno: ",
+  "queriesUsed: ": " Upita iskorišteno: ",
   "queriesLeft: ": "Upita preostalo: ",
-  "resettingIn: ": "Resetiranje za: ",
+  "resettingIn: ": " Resetiranje za: ",
   " seconds": " sekunda(i)",
 
   "noResultsFound": "Niti jedan rezultat nije pronađen.",

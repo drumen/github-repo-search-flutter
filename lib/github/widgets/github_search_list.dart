@@ -155,22 +155,72 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
   Widget _buildRateLimitsTextBox(GitHubRateLimit rateLimits) {
     _resetTime = Common.getSecondsTillReset(rateLimits.reset);
     _startTimer();
+    bool isLargeScreen = MediaQuery.of(context).size.width > Common.largeScreenSize;
 
     return Container(
+      padding: isLargeScreen ?
+        const EdgeInsets.symmetric(horizontal: 20.0) : const EdgeInsets.symmetric(),
       height: 42,
       width: double.infinity,
       color: Colors.lightBlue[800],
-      child: Text(
-        'queryLimitPerMinute: '.tr() + rateLimits.limit.toString() +
-          '      ' + 'queriesUsed: '.tr() + rateLimits.used.toString() +
-          '\n' + 'queriesLeft: '.tr() + rateLimits.remaining.toString() +
-          '      ' + 'resettingIn: '.tr() + _resetTime.toString() + ' seconds'.tr(),
-        style: const TextStyle(color: Colors.white, fontSize: 16),
-        textAlign: TextAlign.center,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
+      child: Row(
+        children: [
+          _buildPerScreenSize(isLargeScreen),
+          Expanded(
+            flex: 15,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildQueryRatesTexts(
+                        'queryLimitPerMinute: ', rateLimits.limit),
+                    _buildQueryRatesTexts('queriesUsed: ', rateLimits.used),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildQueryRatesTexts(
+                        'queriesLeft: ', rateLimits.remaining),
+                    Text(
+                      'resettingIn: '.tr() +
+                          _resetTime.toString() +
+                          ' seconds'.tr(),
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 16),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          ),
+          _buildPerScreenSize(isLargeScreen),
+        ],
       ),
     );
+  }
+
+  _buildQueryRatesTexts(String text, int value) {
+    return Text(
+      text.tr() + value.toString(),
+      style: const TextStyle(color: Colors.white, fontSize: 16),
+      textAlign: TextAlign.center,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+
+  Widget _buildPerScreenSize(bool isLargeScreen) {
+    return isLargeScreen ?
+      Container() :
+      Expanded(
+        child: Container(),
+      );
   }
 
   Widget _getHintAndInfoMessage(SearchState state, {String? message}) {

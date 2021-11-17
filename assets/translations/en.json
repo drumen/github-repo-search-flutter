@@ -37,9 +37,9 @@
   "[no description]": "[no description]",
 
   "queryLimitPerMinute: ": "Query limit per minute: ",
-  "queriesUsed: ": "Queries used: ",
+  "queriesUsed: ": " Queries used: ",
   "queriesLeft: ": "Queries left: ",
-  "resettingIn: ": "Resetting in: ",
+  "resettingIn: ": " Resetting in: ",
   " seconds": " second(s)",
 
   "noResultsFound": "No results found.",

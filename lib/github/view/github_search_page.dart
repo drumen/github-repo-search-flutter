@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:github_repo_search/github/bloc_search/search_bloc.dart';
+import 'package:github_repo_search/github/common/common.dart';
 import 'package:github_repo_search/github/models/search_type.dart';
 import 'package:github_repo_search/github/widgets/details/github_details_widget.dart';
 import 'package:github_repo_search/github/widgets/github_search_list.dart';
@@ -22,13 +23,12 @@ class GitHubSearchPage extends StatefulWidget {
 class _GitHubSearchPageState extends State<GitHubSearchPage> {
 
   String _currentQuery = '';
-  bool _isLargeScreen = false;
   Object? _selectedObject;
   SearchType _searchType = SearchType.repositories;
 
   @override
   Widget build(BuildContext context) {
-    _isLargeScreen = MediaQuery.of(context).size.width > 700;
+    bool isLargeScreen = MediaQuery.of(context).size.width > Common.largeScreenSize;
 
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +43,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                 padding: const EdgeInsets.all(10.0),
                 child: OrientationBuilder(builder: (context, orientation) {
                   return Flex(
-                    direction: _isLargeScreen ? Axis.horizontal : Axis.vertical,
+                    direction: isLargeScreen ? Axis.horizontal : Axis.vertical,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Flexible(
@@ -121,7 +121,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                    Expanded(
                      child: GitHubSearchList(
                        _currentQuery, _searchType, (gitHubObject) {
-                         if (_isLargeScreen) {
+                         if (isLargeScreen) {
                            _selectedObject = gitHubObject;
                            setState(() {});
                          }
@@ -135,7 +135,7 @@ class _GitHubSearchPageState extends State<GitHubSearchPage> {
                          }
                      }),
                    ),
-                   _isLargeScreen ?
+                   isLargeScreen ?
                      Expanded(child: GitHubDetailsWidget(_searchType, _selectedObject)) :
                      Container(),
                   ]);

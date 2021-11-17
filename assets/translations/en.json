@@ -38,8 +38,8 @@
 
   "queryLimitPerMinute: ": "Query limit per minute: ",
   "queriesUsed: ": " Queries used: ",
-  "queriesLeft: ": "Queries left: ",
-  "resettingIn: ": " Resetting in: ",
+  "queriesLeft: ": " Queries left: ",
+  "resettingIn: ": "Resetting in: ",
   " seconds": " second(s)",
 
   "noResultsFound": "No results found.",

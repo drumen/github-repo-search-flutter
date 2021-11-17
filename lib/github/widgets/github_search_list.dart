@@ -182,18 +182,17 @@ class _GitHubSearchListState extends State<GitHubSearchList> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildQueryRatesTexts(
-                        'queriesLeft: ', rateLimits.remaining),
                     Text(
                       'resettingIn: '.tr() +
                           _resetTime.toString() +
                           ' seconds'.tr(),
                       style:
-                          const TextStyle(color: Colors.white, fontSize: 16),
+                      const TextStyle(color: Colors.white, fontSize: 16),
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                    )
+                    ),
+                    _buildQueryRatesTexts('queriesLeft: ', rateLimits.remaining),
                   ],
                 ),
               ],

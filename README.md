@@ -2,7 +2,7 @@
 
 A GitHub Search showreel app done in Flutter
 
-## Brief details
+## Details
 
 App searches for GitHub repositories, users and code using GitHub API. 
 
@@ -25,25 +25,36 @@ be reset. Search limit quota is 30 queries a minute for authenticated
 requests and 10 queries a minute for unauthenticated requests. This data
 is displayed below search results list.
 
+Localisation support is implemented for English and Croatian.
+
 App is optimized for different screen sizes and responsive design 
 is implemented.
 
 App is tested on Android and Chrome.
 
-## Note
+## App history
 
-GIF screen recording and screenshots are not up to date with the latest commits.
+App was initially made as part of one of my tech interview. After that, commits done 
+for tech interview were deleted and app functionality was extended.
 
 ## Screen recording and screenshots
 
+### Web
+
 <p align="center"><img src="recording-web.gif"></p>
 
-<p align="center"><img src="screenshot-web.png"></p>
+<p align="center"><img src="screenshot-web-1.png"></p>
 
-<p align="center"><img src="screenshot-mobile-home.png"></p>
+<p align="center"><img src="screenshot-web-2.png"></p>
 
-<p align="center"><img src="screenshot-mobile-list-1.png"></p>
+### Mobile
 
-<p align="center"><img src="screenshot-mobile-details.png"></p>
+<p align="center"><img src="screenshot-mobile-1.png"></p>
 
-<p align="center"><img src="screenshot-mobile-list-2.png"></p>
+<p align="center"><img src="screenshot-mobile-2.png"></p>
+
+<p align="center"><img src="screenshot-mobile-3.png"></p>
+
+### Tablet
+
+<p align="center"><img src="screenshot-tablet.png"></p>
